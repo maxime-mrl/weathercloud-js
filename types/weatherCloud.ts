@@ -18,6 +18,11 @@ export type weather_data = {
     wdiravg: number, // average wind direction (degree)
     solarrad?: number, // solar radiation (W/m²)
     uvi?: number // UV index
+
+    // logged only
+
+    tempin?: number // Interior temperature (°C)
+    humin?: number // Interior humidity (%)
 };
 
 export type last_update = {
