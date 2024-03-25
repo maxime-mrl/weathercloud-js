@@ -73,28 +73,65 @@ npm run clean
 
 ### known endpoints
 
-This is a list of all known endpoints. There are more existing (mainly logged ones). The return type refers to `./types/weatherCloud.ts` where everything is documented. Eventually, I'll make a full doc here.
+This is a list of all known endpoints. There are more existing (mainly logged ones). The return type/interface refers to `./types/weatherCloud.ts` where everything is documented. Eventually, I'll make a full doc here.
+
+**OPTIONAL / NO LOGIN**
 
  - Get actual weather data
    - [URl] `app.weathercloud.net/device/values?code={id}`
    - [DATA] None
-   - [RETURN] Object (type weather_data)
+   - [RETURN] Object (interface WeatherData)
+   - [LOGIN] optional (more infos if logged and owned)
  - Get last update info
    - [URl] `app.weathercloud.net/device/ajaxupdatedate`
    - [DATA] `d={id}`
-   - [RETURN] Object (type last_update)
+   - [RETURN] Object (interface LastUpdate)
+   - [LOGIN] false
  - Get owner and station profile data
    - [URl] `app.weathercloud.net/device/ajaxprofile`
    - [DATA] `d={id}`
-   - [RETURN] Object (type profile)
- - Get station statistic infos (update battery etc)
-   - [URl] `app.weathercloud.net/device/ajaxdevicestats`
-   - [DATA] `device={id}`
-   - [RETURN] WIP
+   - [RETURN] Object (interface Profile)
+   - [LOGIN] false
  - Get basic statistics
    - [URl] `app.weathercloud.net/device/stats`
    - [DATA] `code=${id}`
-   - [RETURN] WIP
+   - [RETURN] Object (interface Statistic)
+   - [LOGIN] optional (more infos if logged and owned)
+ - Get top devices
+   - [URL] `app.weathercloud.net/page/popular/country/${countryCode}/period/${period:"day"|"week"|"month"|"year"|"all"}`
+   - [DATA] None
+   - [RETURN] array (type stationList)
+   - [LOGIN] false
+ - Get top followed devices
+   - [URL] `app.weathercloud.net/page/followers/country/${countryCode}`
+   - [DATA] None
+   - [RETURN] array (type stationList)
+   - [LOGIN] false
+ - Get newest devices
+   - [URL] `app.weathercloud.net/page/newest/country/${countryCode}`
+   - [DATA] None
+   - [RETURN] array (type stationList)
+   - [LOGIN] false
+ - Get nearest station from coordinate
+   - [URL] `app.weathercloud.net/page/coordinates/latitude/${lat}/longitude/${lon}/distance/${radius}`
+   - [DATA] None
+   - [RETURN] array (type stationList)
+   - [LOGIN] false
+
+**LOGIN REQUIRED**
+
+ - Get station statistic infos (update battery etc)
+   - [URl] `app.weathercloud.net/device/ajaxdevicestats`
+   - [DATA] `device={id}`
+   - [RETURN] Array (type uptime)
+   - [LOGIN] true (for owned or not - maybe owned can give battery and more stats)
+
+
+**NOT DEFINED (WIP)**
+ - Get your history (probably w/ cookies so not very usefull)
+   - [URL] `app.weathercloud.net/page/lastviews`
+   - [DATA] None
+   - [RETURN] array (type stationList)
  - Get wind history
    - [URl] `app.weathercloud.net/device/wind`
    - [DATA] `code=${id}`
@@ -105,16 +142,6 @@ This is a list of all known endpoints. There are more existing (mainly logged on
    - [RETURN] WIP
  - Get owned/fav devices
    - [URL] `app.weathercloud.net/page/own`
- - Get top devices
-   - [URL] `app.weathercloud.net/page/popular/country/FR/period/day`
- - Get top followed devices
-   - [URL] `app.weathercloud.net/page/followers/country/FR`
- - Get newest devices
-   - [URL] `app.weathercloud.net/page/newest/country/FR`
- - Get your history (probably w/ cookies so not very usefull)
-   - [URL] `app.weathercloud.net/page/lastviews`
- - Get nearest station from coordinate
-   - [URL] `app.weathercloud.net/page/coordinates/latitude/46.1402233/longitude/6.1554745/distance/5`
  - Login
    - [URL] `app.weathercloud.net/signin`
  - Register

@@ -1,6 +1,6 @@
-import { last_update, profile, weatherCloud_id, weather_data } from "./types/weatherCloud";
+import type { LastUpdate, Profile, weatherCloudId, WeatherData } from "./types/weatherCloud";
 
-export default async function fetchWeather(id:weatherCloud_id) : Promise<Object> {
+export default async function fetchWeather(id:weatherCloudId) : Promise<Object> {
     try {
         if (!id || /^\d{10}$/.test(id)) throw new Error("invalid ID")
         const fullReport = {
@@ -83,7 +83,7 @@ export default async function fetchWeather(id:weatherCloud_id) : Promise<Object>
     }
 }
 
-async function fetchData(url:string, data:string):Promise<last_update | weather_data | profile | object> {
+async function fetchData(url:string, data:string):Promise<LastUpdate | WeatherData | Profile | object> {
     const resp = await fetch(url, {
         method: "post",
         headers: {
