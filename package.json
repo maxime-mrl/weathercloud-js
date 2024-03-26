@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "dev": "nodemon index.ts",
+    "example": "ts-node example.ts",
     "build": "tsc --build",
     "clean": "tsc --build --clean"
   },

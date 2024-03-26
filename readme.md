@@ -117,6 +117,11 @@ This is a list of all known endpoints. There are more existing (mainly logged on
    - [DATA] None
    - [RETURN] array (type stationList)
    - [LOGIN] false
+ - Login
+   - [URL] `app.weathercloud.net/signin`
+   - [DATA] FormData (URLSearchParams: { entity: "mail", password: "password": remeberMe: 0 | 1 })
+   - [RETURN] 200 if not logged | 302 with set-cookie header if loggin successfull
+   - [LOGIN] false
 
 **LOGIN REQUIRED**
 
@@ -142,9 +147,7 @@ This is a list of all known endpoints. There are more existing (mainly logged on
    - [RETURN] WIP
  - Get owned/fav devices
    - [URL] `app.weathercloud.net/page/own`
- - Login
-   - [URL] `app.weathercloud.net/signin`
- - Register
+ - Register **will not make this routes because of limited use since email confirmation is needed**
    - [URL] `app.weathercloud.net/signup`
 
 ## License

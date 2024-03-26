@@ -1,7 +1,9 @@
-import fetchWeather from ".";
+import { login, getStationStatus } from ".";
 
-async function fetchAndLogWeather() {
-    const data = await fetchWeather("5305914082");
-    console.log(data);
+async function fetchAndLogStatus() {
+    const loggingstatus = await login("wadomag381@shaflyn.com", "azerty"); // testing account made with garbage mail
+    console.log(loggingstatus);
+    if (!loggingstatus) return;
+    console.log(await getStationStatus("5305914082"));
 }
-fetchAndLogWeather();
+fetchAndLogStatus();
