@@ -1,16 +1,16 @@
 import { login } from ".";
-import type { LastUpdate, Profile, WeatherData, uptime } from "./types/weatherCloud";
+import type { LastUpdate, Profile, Statistic, WeatherData, Device, Uptime } from "./types/weatherCloud";
 
 const session = {
-	cookie: "",
-	expireDate: 0,
-	credentials: {
+	cookie: "", // actual cookie
+	expireDate: 0, // expiry date
+	credentials: { // used to re-autentificate the session if needed -- this can be consider as insecure to you, you can choose not to store them with loggin(mail, pass, false) (default false)
 		mail: "",
 		password: ""
 	}
 };
 
-export async function fetchData(url:string, data:string):Promise<LastUpdate | WeatherData | Profile | uptime | object> { // fetch data from API
+export async function fetchData(url:string, data:string=""):Promise<LastUpdate | WeatherData | Profile | Uptime[] | Statistic | Device[] | { error: boolean, err: any }> { // fetch data from API
     const resp = await fetch(url, {
         method: "post",
         headers: {
@@ -41,7 +41,7 @@ export async function getCookie() { // check cookie validity and return it
 	// check if session is expired
 	if (session.cookie && session.expireDate <= Date.now()) {
 		// try to login back
-		if (!await login(session.credentials.mail, session.credentials.password)) {
+		if (session.credentials.mail.length <= 1 || !await login(session.credentials.mail, session.credentials.password, true)) {
 			// if can't login back reset cookie
 			session.cookie = "";
 			session.expireDate = 0;

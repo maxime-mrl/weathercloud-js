@@ -1,7 +1,7 @@
-import type { weatherCloudId } from "./types/weatherCloud";
+import type { Device, weatherCloudId } from "./types/weatherCloud";
 import { chillFn, heatFn, fetchData, setCookies } from "./utils";
 
-export async function fetchWeather(id:weatherCloudId) : Promise<Object> { // fetch general weather data
+export async function fetchWeather(id:weatherCloudId) { // fetch general weather data
     try {
         if (!id || /^\d{10}$/.test(id)) throw new Error("invalid ID")
         const fullReport = {
@@ -11,7 +11,7 @@ export async function fetchWeather(id:weatherCloudId) : Promise<Object> { // fet
         };
 
         /* --------------------------- request basic data --------------------------- */
-        const data = await fetchData(`https://app.weathercloud.net/device/values?code=${id}`, "");
+        const data = await fetchData(`https://app.weathercloud.net/device/values?code=${id}`);
         const lastUpdate = await fetchData(`https://app.weathercloud.net/device/ajaxupdatedate`, `d=${id}`);
         const profile = await fetchData(`https://app.weathercloud.net/device/ajaxprofile`, `d=${id}`);
         // history (WIP)
@@ -84,17 +84,52 @@ export async function fetchWeather(id:weatherCloudId) : Promise<Object> { // fet
     }
 }
 
-export async function getStationStatus(id:weatherCloudId) : Promise<Object> { // fetch the station status [NEED LOGIN]
+export async function getStationStatus(id:weatherCloudId) { // fetch the station status [NEED LOGIN]
     try {
         const data = await fetchData(`https://app.weathercloud.net/device/ajaxdevicestats`, `device=${id}`);
-        if (!data || !Array.isArray(data))  throw new Error("Failed to fetch");
+        if (!data || !Array.isArray(data) || !("date" in data[0]))  throw new Error("Failed to fetch");
         return data;
     } catch (err) {
         return { error: err };
     }
 }
 
-export async function login(mail:string, password: string) { // log in and retrieve the session cookie
+export async function getStatistics(id:weatherCloudId) {
+    try {
+        const data = await fetchData(`https://app.weathercloud.net/device/stats`, `code=${id}`);
+        if (!data || !("temp_current" in data))  throw new Error("Failed to fetch");
+        return data;
+    } catch (err) {
+        return { error: err };
+    }
+}
+
+export async function getNearest(lat: string|number, lon: string|number, radius: string|number) {
+    try {
+        const data = await fetchData(`https://app.weathercloud.net/page/coordinates/latitude/${lat}/longitude/${lon}/distance/${radius}`);
+        if (!data || !("devices" in data) || !Array.isArray(data.devices))  throw new Error("Failed to fetch");
+        const devices = data.devices.map((device:Device) => {
+            const { data, values, ...deviceInfos } = device;
+            // Convert string values to numbers
+            const numberValues = Object.fromEntries( // parse values to int so it's just like normal WeatherData
+                Object.entries(values).map(([key, value]) => {
+                    if (typeof value === "string") return [key, +value];
+                    return [key, value];
+                })
+            );
+            return {
+                ...deviceInfos,
+                values: numberValues,
+                distance: +data, // get a value that make sense
+            };
+        });
+        return devices
+    } catch (err) {
+        return [ { error: err } ];
+    }
+}
+
+export async function login(mail:string, password: string, storeCredentials?: boolean) { // log in and retrieve the session cookie
     const formData = new URLSearchParams();
     formData.append('LoginForm[entity]', mail);
     formData.append('LoginForm[password]', password);
@@ -109,6 +144,11 @@ export async function login(mail:string, password: string) { // log in and retri
         redirect: "manual"
     });
     if (resp.status !== 302) return false;
-    if (!setCookies(resp.headers.getSetCookie().join("; ").split("; "), mail, password)) return false;
+    // define what we should store
+    const store = storeCredentials ? { mail, password } : {
+        mail: "",
+        password: ""
+    }
+    if (!setCookies(resp.headers.getSetCookie().join("; ").split("; "), store.mail, store.password)) return false;
     else return true;
 }
