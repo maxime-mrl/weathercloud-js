@@ -1,5 +1,5 @@
 import { login } from ".";
-import type { LastUpdate, Profile, Statistic, WeatherData, Device, Uptime } from "./types/weatherCloud";
+import type { LastUpdate, Profile, Statistic, WeatherData, Device, Uptime, DevicesList } from "./types/weatherCloud";
 
 const session = {
 	cookie: "", // actual cookie
@@ -10,7 +10,7 @@ const session = {
 	}
 };
 
-export async function fetchData(url:string, data:string=""):Promise<LastUpdate | WeatherData | Profile | Uptime[] | Statistic | Device[] | { error: boolean, err: any }> { // fetch data from API
+export async function fetchData(url:string, data:string=""):Promise<LastUpdate | WeatherData | Profile | Uptime[] | Statistic | DevicesList | { error: boolean, err: any }> { // fetch data from API
     const resp = await fetch(url, {
         method: "post",
         headers: {
@@ -52,6 +52,24 @@ export async function getCookie() { // check cookie validity and return it
 		}
 	}
 	return session.cookie;
+}
+
+export function parseDevicesList(devices:Device[], dataName:string) { // correct a few deffec
+	return devices.map((device:Device) => {
+		const { data, values, ...deviceInfos } = device;
+		// Convert string values to numbers
+		const numberValues = Object.fromEntries( // parse values to int so it's just like normal WeatherData
+			Object.entries(values).map(([key, value]) => {
+				if (typeof value === "string") return [key, +value];
+				return [key, value];
+			})
+		);
+		return {
+			...deviceInfos,
+			values: numberValues,
+			[dataName]: +data, // get a value that make sense
+		};
+	});
 }
 
 export const chillFn = (temp:number, wspd:number) => { // mostly untouched from weathercloud

@@ -1,5 +1,6 @@
-import type { Device, weatherCloudId } from "./types/weatherCloud";
-import { chillFn, heatFn, fetchData, setCookies } from "./utils";
+import type { weatherCloudId, countryCode, periodStr } from "./types/weatherCloud";
+import { chillFn, heatFn, fetchData, setCookies, parseDevicesList } from "./utils";
+
 
 export async function fetchWeather(id:weatherCloudId) { // fetch general weather data
     try {
@@ -14,9 +15,6 @@ export async function fetchWeather(id:weatherCloudId) { // fetch general weather
         const data = await fetchData(`https://app.weathercloud.net/device/values?code=${id}`);
         const lastUpdate = await fetchData(`https://app.weathercloud.net/device/ajaxupdatedate`, `d=${id}`);
         const profile = await fetchData(`https://app.weathercloud.net/device/ajaxprofile`, `d=${id}`);
-        // history (WIP)
-        // const statistic = await fetchData(`https://app.weathercloud.net/device/stats`, `code=${id}`);
-        // const windHistory = await fetchData(`https://app.weathercloud.net/device/wind`, `code=${id}`);
 
         /* --------------------------- check data presence -------------------------- */
         if (!("temp" in data) ||
@@ -108,24 +106,28 @@ export async function getNearest(lat: string|number, lon: string|number, radius:
     try {
         const data = await fetchData(`https://app.weathercloud.net/page/coordinates/latitude/${lat}/longitude/${lon}/distance/${radius}`);
         if (!data || !("devices" in data) || !Array.isArray(data.devices))  throw new Error("Failed to fetch");
-        const devices = data.devices.map((device:Device) => {
-            const { data, values, ...deviceInfos } = device;
-            // Convert string values to numbers
-            const numberValues = Object.fromEntries( // parse values to int so it's just like normal WeatherData
-                Object.entries(values).map(([key, value]) => {
-                    if (typeof value === "string") return [key, +value];
-                    return [key, value];
-                })
-            );
-            return {
-                ...deviceInfos,
-                values: numberValues,
-                distance: +data, // get a value that make sense
-            };
-        });
-        return devices
+        return parseDevicesList(data.devices, "distance");
     } catch (err) {
         return [ { error: err } ];
+    }
+}
+
+export async function getTop(definer:"newest"|"followers"|"popular",countryCode:countryCode, period?:periodStr) {
+    try {
+        let url = `https://app.weathercloud.net/page/${definer}/country/${countryCode}`;
+        if (definer === "popular") {
+            if (!period) throw new Error("Period required for popular ranking");
+            url += `/period/${period}`;
+        }
+        console.log(url)
+        const data = await fetchData(url);
+        if (!data || !("devices" in data) || !Array.isArray(data.devices))  throw new Error("Failed to fetch");
+        let dataType:string = definer;
+        if (definer === "newest") dataType = "age";
+        if (definer === "popular") dataType = "views";
+        return parseDevicesList(data.devices, dataType);
+    } catch (err) {
+        return { error: err };
     }
 }
 

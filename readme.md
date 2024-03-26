@@ -18,6 +18,7 @@ weathercloud.net is a web application that logs and makes weather data from pers
     - [Development](#development)
     - [Build app](#build-app)
   - [Currently Supported](#currently-supported)
+  - [Roadmap / todo list - what's still to be done](#roadmap--todo-list---whats-still-to-be-done)
   - [API documentation](#api-documentation)
     - [known endpoints](#known-endpoints)
   - [License](#license)
@@ -68,6 +69,15 @@ npm run clean
  - ❌ Data protected by login
  - ❌ Statistics (basic history)
  - ❌ Wind history
+
+## Roadmap / todo list - what's still to be done
+
+- [ ] Define the last known url endpoints
+- [ ] Create the method to utilize these endpoints
+- [ ] Big code cleanup
+- [ ] Search for unfound endpoints and restart these stages if needed
+- [ ] Make a real documentation
+- [ ] Make an NPM module ?
 
 ## API documentation
 

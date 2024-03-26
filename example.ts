@@ -1,4 +1,4 @@
-import { login, getStationStatus, getNearest } from ".";
+import { login, getStationStatus, getNearest, getTop } from ".";
 
 async function fetchAndLogStatus() {
     const loggingstatus = await login("wadomag381@shaflyn.com", "azerty", true); // testing account made with garbage mail
@@ -7,10 +7,12 @@ async function fetchAndLogStatus() {
     console.log(await getStationStatus("5305914082"));
 }
 
-async function findNearest() {
-    const stations = await getNearest(46.161999, 6.177229, 10);
-    console.log(stations[0])
-    console.log(stations)
+async function getTopStations() {
+    const stations = await getTop("popular", "FR", "day");
+    if (Array.isArray(stations)) {
+        console.log(stations[0])
+        console.log(stations.length)
+    }
 }
 
-findNearest();
+getTopStations();

@@ -9,6 +9,9 @@ type singleStatistic = [
 
 export type weatherCloudId = `${number}${number}${number}${number}${number}${number}${number}${number}${number}${number}`;
 
+export type countryCode = `${Uppercase<string>}${Uppercase<string>}`;
+export type periodStr = "day"|"week"|"month"|"year"|"all";
+
 export interface WeatherData {
     epoch: number // time of the last update (unix seconds)
     bar: number // pressure (hPa)
@@ -74,6 +77,10 @@ export interface Device {
     values: StringifyNumbers<WeatherData> // just like weather_data but with strings for some reason
     data: string // number of views / distance (km) / followers / age (day) // depending on what's asked
 };
+
+export interface DevicesList {
+    devices: Device[]
+}
 
 export interface Uptime {
     date: number // day (unix seconds)
