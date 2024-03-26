@@ -59,16 +59,21 @@ npm run clean
  - ✔️ Device info
  - ✔️ Last update info
  - ✔️ Actual weather data
- - ✔️ Computation of various data based on received values including:
+ - ⏳ Computation of various data based on received values including:
    - Clouds height 
    - Text average time 
    - Feels like temperature
    - Text time of last update
    - Minutes elapsed since last update
    - Server last update time
- - ❌ Data protected by login
- - ❌ Statistics (basic history)
+   - Maybe more ?
+ - ✔️ Data protected by login
+ - ✔️ Statistics (basic history)
  - ❌ Wind history
+ - ❌ own history
+ - ❌ graph data
+ - ❌ Owned / favourite devices
+ - ❌ Maybe more ?
 
 ## Roadmap / todo list - what's still to be done
 
