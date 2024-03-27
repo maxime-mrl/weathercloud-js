@@ -145,6 +145,11 @@ This is a list of all known endpoints. There are more existing (mainly logged on
    - [DATA] `device={id}`
    - [RETURN] Array (type uptime)
    - [LOGIN] true (for owned or not - maybe owned can give battery and more stats)
+ - Get owned/fav devices
+   - [URL] `app.weathercloud.net/page/own`
+   - [DATA] none
+   - [RETURN] { device: Device[], favorites: Device[] }
+   - [LOGIN] true
 
 
 **NOT DEFINED (WIP)**
@@ -160,8 +165,14 @@ This is a list of all known endpoints. There are more existing (mainly logged on
    - [URl] `app.weathercloud.net/device/evolution`
    - [DATA] `device=${id}; variable=${variablecode(101/201/541/641/701/801/811/1001/1101/6011/6501)}; period=${variableday(day/week/month)}; WEATHERCLOUD_CSRF_TOKEN=${token?}`
    - [RETURN] WIP
- - Get owned/fav devices
-   - [URL] `app.weathercloud.net/page/own`
+ - Follow a device
+   - [URL] `app.weathercloud.net/device/ajaxfavorite`
+   - [DATA] `device={id}; delete="0|1"`
+   - [RETURN] WIP
+ - know if a device is favorite
+   - [URL] `app.weathercloud.net/device/ajaxfavoritesnumber`
+   - [DATA] `d={id}`
+   - [RETURN] WIP
  - Register **will not make this routes because of limited use since email confirmation is needed**
    - [URL] `app.weathercloud.net/signup`
 

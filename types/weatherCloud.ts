@@ -75,19 +75,25 @@ export interface Device {
     isFavorite: boolean // with account cookie tell you if you favorited this station
     update: number // seconds elapsed since last update
     values: StringifyNumbers<WeatherData> // just like weather_data but with strings for some reason
-    data: string // number of views / distance (km) / followers / age (day) // depending on what's asked
+    status?: string
+    data?: string // number of views / distance (km) / followers / age (day) // depending on what's asked
 };
 
 export interface DevicesList {
     devices: Device[]
-}
+};
+
+export interface OwnDevices {
+    devices: Device[] | [];
+    favorites: Device[] | [];
+};
 
 export interface Uptime {
     date: number // day (unix seconds)
     value: number // uptime (%)
 
     // some other things for battery/current maybe? - only for compatible owned station
-}
+};
 
 export interface Statistic { // data type similar to weather_data
     last_update: number // time of the last update (unix seconds)

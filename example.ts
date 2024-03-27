@@ -1,10 +1,11 @@
-import { login, getStationStatus, getNearest, getTop } from ".";
+import { login, getStationStatus, getNearest, getTop, getOwn } from ".";
 
 async function fetchAndLogStatus() {
     const loggingstatus = await login("wadomag381@shaflyn.com", "azerty", true); // testing account made with garbage mail
     console.log(loggingstatus);
     if (!loggingstatus) return;
-    console.log(await getStationStatus("5305914082"));
+    // console.log(await getStationStatus("5305914082"));
+    console.log((await getOwn()).favorites);
 }
 
 async function getTopStations() {
@@ -15,4 +16,4 @@ async function getTopStations() {
     }
 }
 
-getTopStations();
+fetchAndLogStatus();

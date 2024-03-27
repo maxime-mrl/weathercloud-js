@@ -1,5 +1,5 @@
 import type { weatherCloudId, countryCode, periodStr } from "./types/weatherCloud";
-import { chillFn, heatFn, fetchData, setCookies, parseDevicesList } from "./utils";
+import { chillFn, heatFn, fetchData, setCookies, parseDevicesList, getCookie } from "./utils";
 
 
 export async function fetchWeather(id:weatherCloudId) { // fetch general weather data
@@ -84,6 +84,7 @@ export async function fetchWeather(id:weatherCloudId) { // fetch general weather
 
 export async function getStationStatus(id:weatherCloudId) { // fetch the station status [NEED LOGIN]
     try {
+        if ((await getCookie()).length < 1) throw new Error("Session required!");
         const data = await fetchData(`https://app.weathercloud.net/device/ajaxdevicestats`, `device=${id}`);
         if (!data || !Array.isArray(data) || !("date" in data[0]))  throw new Error("Failed to fetch");
         return data;
@@ -126,6 +127,20 @@ export async function getTop(definer:"newest"|"followers"|"popular",countryCode:
         if (definer === "newest") dataType = "age";
         if (definer === "popular") dataType = "views";
         return parseDevicesList(data.devices, dataType);
+    } catch (err) {
+        return { error: err };
+    }
+}
+
+export async function getOwn() {
+    try {
+        if ((await getCookie()).length < 1) throw new Error("Session required!");
+        const data = await fetchData(`https://app.weathercloud.net/page/own`);
+        if (!data || !("devices" in data) || !("favorites" in data))  throw new Error("Failed to fetch");
+        return {
+            devices: parseDevicesList(data.devices),
+            favorites: parseDevicesList(data.favorites),
+        };
     } catch (err) {
         return { error: err };
     }
