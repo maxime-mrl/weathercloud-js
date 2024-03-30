@@ -18,28 +18,33 @@ export interface WeatherData {
     wdir: number // wind direction (degree)
     wspd: number // wind speed (m/s)
     wspdhi: number // wind gust (m/s)
+    wspdavg: number // average wind speed (m/s)
+    wdiravg: number // average wind direction (degree)
     rainrate: number // rainrate (mm/hour)
     rain: number // rained today (mm)
     temp: number // temperature (°C)
-    temp02?: number // temperature of something (not sure what nor why dosen't seems to be displayed on original website not on all stations) (°C)
-    chill?: number // seems to be related to feel_like but there is a separate way of getting it so i'm not sure
-    heat?: number // seems to be related to feel_like but there is a separate way of getting it so i'm not sure -- not included by every stations
     hum: number // humidity (%)
     dew: number // dew point (°C)
-    wspdavg: number // average wind speed (m/s)
-    wdiravg: number // average wind direction (degree)
+    
+    // optional
+    temp02?: number // temperature of something (not sure what nor why dosen't seems to be displayed on original website not on all stations) (°C)
+    hum02?: number
+    chill?: number // wind-chill or how much colder will it feels w/ wind
+    heat?: number // heat or how much will it feel hotter with humidity -- not included by every stations
+    thw?: number // Temperature-Humidity-Wind Index or feel like
     solarrad?: number // solar radiation (W/m²)
     uvi?: number // UV index
 
-    // logged only
-
+    // logged only (or maybe not? c:)
     tempin?: number // Interior temperature (°C)
     humin?: number // Interior humidity (%)
+    dewin?: number
+    heatin?: number
 };
 
 export interface LastUpdate {
     update: number // time elapsed since the last update (seconds)
-    status: string // unknkown
+    status: string // "2" is normal "0" is a special state where update is the only thig worth displaying others means some kind of errors
     server_time: number // server time when requested (unix seconds)
     time?: string // added later via logic
 };
@@ -225,4 +230,12 @@ export interface Statistic { // data type similar to weather_data
     humin_month_min?: singleStatistic
     humin_year_max?: singleStatistic
     humin_year_min?: singleStatistic
+}
+
+export interface windStatistics { // data that you will get from the wind endpoint, not sure what it's representing, can be used to get wind sector percentage and speed
+    date: number, // unix time of the data
+    values: {
+        sum: number // not sure what is it
+        scale: number[] // scale[0] represent calm wind, others wind (force?)
+    }[] // 16 values each representing a cardinal (N, NNE, NE, etc)
 }

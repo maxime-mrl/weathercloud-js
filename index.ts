@@ -4,7 +4,7 @@ import { chillFn, heatFn, fetchData, setCookies, parseDevicesList, getCookie } f
 
 export async function fetchWeather(id:weatherCloudId) { // fetch general weather data
     try {
-        if (!id || /^\d{10}$/.test(id)) throw new Error("invalid ID")
+        // if (!id || /^\d{10}$/.test(id)) throw new Error("invalid ID")
         const fullReport = {
             weather: {},
             update: {},
@@ -120,7 +120,6 @@ export async function getTop(definer:"newest"|"followers"|"popular",countryCode:
             if (!period) throw new Error("Period required for popular ranking");
             url += `/period/${period}`;
         }
-        console.log(url)
         const data = await fetchData(url);
         if (!data || !("devices" in data) || !Array.isArray(data.devices))  throw new Error("Failed to fetch");
         let dataType:string = definer;
@@ -168,4 +167,39 @@ export async function login(mail:string, password: string, storeCredentials?: bo
     }
     if (!setCookies(resp.headers.getSetCookie().join("; ").split("; "), store.mail, store.password)) return false;
     else return true;
+}
+
+export async function getWind(id:weatherCloudId) {
+    try {
+        const data = await fetchData(`https://app.weathercloud.net/device/wind?code=${id}`);
+        if (!data || !("date" in data))  throw new Error("Failed to fetch");
+
+        // calculation from weatherclouds to display graphs
+        let wdirdistData: number[] = [];
+        let wspddistData: number[] = [];
+        let total = 0;
+        let calm = 0;
+        
+        data.values.forEach((value) => {
+            const wdir = value.scale.reduce((a, b) => a + b, 0) - value.scale[0];  // total of scale[] - scale[0] (which is no wind)
+            wdirdistData.push(wdir);
+            wspddistData.push(wdir > 0 ? value.sum / wdir : 0);
+            total += wdir;
+            calm += value.scale[0];
+        })
+        total += calm;
+
+        let wdirproportions = wdirdistData.map(wdir => (wdir / total) * 100);
+
+        return {
+            date: data.date, // tile of the update
+            // for graph of percentage per cardinals
+            wdirproportions, // array of proportion of wind, each one is a cardinals
+            calm: (calm/total) * 100, // proportion of calm wind time
+            // for graphs of speed per cardinals
+            wspddistData, // array of wind speeds, each one is a cardinals
+        };
+    } catch (err) {
+        return { error: err };
+    }
 }

@@ -1,4 +1,4 @@
-import { login, getStationStatus, getNearest, getTop, getOwn } from ".";
+import { login, getStationStatus, getNearest, getTop, getOwn, getWind, fetchWeather } from ".";
 
 async function fetchAndLogStatus() {
     const loggingstatus = await login("wadomag381@shaflyn.com", "azerty", true); // testing account made with garbage mail
@@ -16,4 +16,9 @@ async function getTopStations() {
     }
 }
 
-fetchAndLogStatus();
+async function testWind() {
+    const wind = await getWind("4172447340");
+    console.log(wind)
+}
+
+testWind()

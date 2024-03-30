@@ -137,6 +137,10 @@ This is a list of all known endpoints. There are more existing (mainly logged on
    - [DATA] FormData (URLSearchParams: { entity: "mail", password: "password": remeberMe: 0 | 1 })
    - [RETURN] 200 if not logged | 302 with set-cookie header if loggin successfull
    - [LOGIN] false
+ - Get wind history
+   - [URl] `app.weathercloud.net/device/wind?code={id}`
+   - [DATA] None
+   - [RETURN] interface WindStatistic _not sure exactly what is this but enough to use it see function getWind_
 
 **LOGIN REQUIRED**
 
@@ -157,10 +161,6 @@ This is a list of all known endpoints. There are more existing (mainly logged on
    - [URL] `app.weathercloud.net/page/lastviews`
    - [DATA] None
    - [RETURN] array (type stationList)
- - Get wind history
-   - [URl] `app.weathercloud.net/device/wind`
-   - [DATA] `code=${id}`
-   - [RETURN] WIP
  - Get graph data history
    - [URl] `app.weathercloud.net/device/evolution`
    - [DATA] `device=${id}; variable=${variablecode(101/201/541/641/701/801/811/1001/1101/6011/6501)}; period=${variableday(day/week/month)}; WEATHERCLOUD_CSRF_TOKEN=${token?}`
@@ -173,6 +173,12 @@ This is a list of all known endpoints. There are more existing (mainly logged on
    - [URL] `app.weathercloud.net/device/ajaxfavoritesnumber`
    - [DATA] `d={id}`
    - [RETURN] WIP
+ - Get device general infos:
+   - [URL] `app.weathercloud.net/device/info/{id}`
+   - [DATA] none
+   - [RETURN] WIP
+ - Map related
+   - `app.weathercloud.ne/map/metars` && `app.weathercloud.ne/map/bgdevices`
  - Register **will not make this routes because of limited use since email confirmation is needed**
    - [URL] `app.weathercloud.net/signup`
 

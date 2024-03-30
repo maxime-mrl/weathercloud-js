@@ -1,7 +1,7 @@
 import { login } from ".";
-import type { LastUpdate, Profile, Statistic, WeatherData, Device, Uptime, DevicesList, OwnDevices } from "./types/weatherCloud";
+import type { LastUpdate, Profile, Statistic, WeatherData, Device, Uptime, DevicesList, OwnDevices, windStatistics } from "./types/weatherCloud";
 
-type apiReturn = LastUpdate | WeatherData | Profile | Uptime[] | Statistic | DevicesList | OwnDevices;
+type apiReturn = LastUpdate | WeatherData | Profile | Uptime[] | Statistic | DevicesList | OwnDevices | windStatistics;
 
 const session = {
 	cookie: "", // actual cookie
@@ -13,16 +13,16 @@ const session = {
 };
 
 export async function fetchData(url:string, data:string=""):Promise<apiReturn | { error: boolean, err: any }> { // fetch data from API
-    const resp = await fetch(url, {
-        method: "post",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
-            "X-Requested-With": "XMLHttpRequest",
-            "cookie": await getCookie()
-        },
-        body: data
-    });
     try {
+		const resp = await fetch(url, {
+			method: "post",
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+				"X-Requested-With": "XMLHttpRequest",
+				"cookie": await getCookie()
+			},
+			body: data
+		});
         return await resp.json();
     } catch (err) {
         return { error: true, err }
@@ -56,13 +56,16 @@ export async function getCookie() { // check cookie validity and return it
 	return session.cookie;
 }
 
-export function parseDevicesList(devices:Device[], dataName?:string) { // correct a few deffec
+export function parseDevicesList(devices:Device[], dataName?:string) { // correct a few deffect of devicelist
 	return devices.map((device:Device) => {
 		const { data, values, ...deviceInfos } = device;
 		// Convert string values to numbers
-		const numberValues = Object.fromEntries( // parse values to int so it's just like normal WeatherData
+		const numberValues = Object.fromEntries( // parse values to int and divide them so it's just like normal WeatherData because weathercloud is terribly inconsistent
 			Object.entries(values).map(([key, value]) => {
-				if (typeof value === "string") return [key, +value];
+				if (typeof value === "string") {
+					if (/epoch|hum|wdir/.test(key)) return [key, +value]
+					return [key, (+value)/10] // devide by ten the value so it's the right decimal
+				};
 				return [key, value];
 			})
 		);
