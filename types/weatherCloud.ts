@@ -6,25 +6,28 @@ type singleStatistic = [
     number, // time of measurement
     number // value of measurement
 ]
+export type regularID = `${number}${number}${number}${number}${number}${number}${number}${number}${number}${number}`
+export type metarID = `${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}`
 
-export type weatherCloudId = `${number}${number}${number}${number}${number}${number}${number}${number}${number}${number}`;
+export type weatherCloudId = regularID | metarID;
 
 export type countryCode = `${Uppercase<string>}${Uppercase<string>}`;
 export type periodStr = "day"|"week"|"month"|"year"|"all";
 
 export interface WeatherData {
+    // included most of the time
     epoch: number // time of the last update (unix seconds)
     bar: number // pressure (hPa)
     wdir: number // wind direction (degree)
-    wspd: number // wind speed (m/s)
-    wspdhi: number // wind gust (m/s)
-    wspdavg: number // average wind speed (m/s)
     wdiravg: number // average wind direction (degree)
-    rainrate: number // rainrate (mm/hour)
-    rain: number // rained today (mm)
-    temp: number // temperature (°C)
-    hum: number // humidity (%)
-    dew: number // dew point (°C)
+    wspd?: number // wind speed (m/s)
+    wspdhi?: number // wind gust (m/s)
+    wspdavg?: number // average wind speed (m/s)
+    rainrate?: number // rainrate (mm/hour)
+    rain?: number // rained today (mm)
+    temp?: number // temperature (°C)
+    hum?: number // humidity (%)
+    dew?: number // dew point (°C)
     
     // optional
     temp02?: number // temperature of something (not sure what nor why dosen't seems to be displayed on original website not on all stations) (°C)
@@ -34,8 +37,9 @@ export interface WeatherData {
     thw?: number // Temperature-Humidity-Wind Index or feel like
     solarrad?: number // solar radiation (W/m²)
     uvi?: number // UV index
+    vis?: number // visibility (100 of meters)
 
-    // logged only (or maybe not? c:)
+    // logged only (or not if it's from devices list)
     tempin?: number // Interior temperature (°C)
     humin?: number // Interior humidity (%)
     dewin?: number
@@ -50,7 +54,7 @@ export interface LastUpdate {
 };
 
 export interface Profile {
-    observer: { // owner infos
+    observer?: { // owner infos (not present for METAR)
         name: string
         nickname: string
         company: string
@@ -58,14 +62,14 @@ export interface Profile {
     followers: { // follower of this station
         number: string // (this is a number in a string)
     }
-    device: { // device informations
+    device?: { // device informations (not present for METAR)
         brand: string
         model: string
     }
 };
 
 export interface Device {
-    type: string // type of device -- generally device
+    type: "device|metar" // type of device -- device for personal device metar for airport station
     code: weatherCloudId // station ID
     name: string // station name
 
@@ -118,22 +122,6 @@ export interface Statistic { // data type similar to weather_data
     dew_year_max: singleStatistic
     dew_year_min: singleStatistic
     
-    chill_current?: singleStatistic
-    chill_day_max?: singleStatistic
-    chill_day_min?: singleStatistic
-    chill_month_max?: singleStatistic
-    chill_month_min?: singleStatistic
-    chill_year_max?: singleStatistic
-    chill_year_min?: singleStatistic
-    
-    heat_current?: singleStatistic
-    heat_day_max?: singleStatistic
-    heat_day_min?: singleStatistic
-    heat_month_max?: singleStatistic
-    heat_month_min?: singleStatistic
-    heat_year_max?: singleStatistic
-    heat_year_min?: singleStatistic
-    
     hum_current: singleStatistic
     hum_day_max: singleStatistic
     hum_day_min: singleStatistic
@@ -149,14 +137,6 @@ export interface Statistic { // data type similar to weather_data
     bar_month_min: singleStatistic
     bar_year_max: singleStatistic
     bar_year_min: singleStatistic
-    
-    wspd_current: singleStatistic
-    wspd_day_max: singleStatistic
-    wspd_day_min: singleStatistic
-    wspd_month_max: singleStatistic
-    wspd_month_min: singleStatistic
-    wspd_year_max: singleStatistic
-    wspd_year_min: singleStatistic
     
     wspdavg_current: singleStatistic
     wspdavg_day_max: singleStatistic
@@ -181,14 +161,6 @@ export interface Statistic { // data type similar to weather_data
     wdiravg_month_min: singleStatistic
     wdiravg_year_max: singleStatistic
     wdiravg_year_min: singleStatistic
-    
-    rainrate_current: singleStatistic
-    rainrate_day_max: singleStatistic
-    rainrate_day_min: singleStatistic
-    rainrate_month_max: singleStatistic
-    rainrate_month_min: singleStatistic
-    rainrate_year_max: singleStatistic
-    rainrate_year_min: singleStatistic
 
     rain_current: singleStatistic
     rain_day_max: singleStatistic
@@ -198,6 +170,23 @@ export interface Statistic { // data type similar to weather_data
     rain_year_max: singleStatistic
     rain_year_total: singleStatistic
     
+    // optional
+    wspd_current?: singleStatistic
+    wspd_day_max?: singleStatistic
+    wspd_day_min?: singleStatistic
+    wspd_month_max?: singleStatistic
+    wspd_month_min?: singleStatistic
+    wspd_year_max?: singleStatistic
+    wspd_year_min?: singleStatistic
+    
+    rainrate_current?: singleStatistic
+    rainrate_day_max?: singleStatistic
+    rainrate_day_min?: singleStatistic
+    rainrate_month_max?: singleStatistic
+    rainrate_month_min?: singleStatistic
+    rainrate_year_max?: singleStatistic
+    rainrate_year_min?: singleStatistic
+
     solarrad_current?: singleStatistic
     solarrad_day_max?: singleStatistic
     solarrad_day_hours?: singleStatistic
@@ -213,6 +202,31 @@ export interface Statistic { // data type similar to weather_data
     uvi_month_min?: singleStatistic
     uvi_year_max?: singleStatistic
     uvi_year_min?: singleStatistic
+    
+    chill_current?: singleStatistic
+    chill_day_max?: singleStatistic
+    chill_day_min?: singleStatistic
+    chill_month_max?: singleStatistic
+    chill_month_min?: singleStatistic
+    chill_year_max?: singleStatistic
+    chill_year_min?: singleStatistic
+    
+    heat_current?: singleStatistic
+    heat_day_max?: singleStatistic
+    heat_day_min?: singleStatistic
+    heat_month_max?: singleStatistic
+    heat_month_min?: singleStatistic
+    heat_year_max?: singleStatistic
+    heat_year_min?: singleStatistic
+    
+    // visibility for some reason divided by 100
+    vis_current?: singleStatistic
+    vis_day_max?: singleStatistic
+    vis_day_min?: singleStatistic
+    vis_month_max?: singleStatistic
+    vis_month_min?: singleStatistic
+    vis_year_max?: singleStatistic
+    vis_year_min?: singleStatistic
 
     // logged only
     tempin_current?: singleStatistic
@@ -230,6 +244,24 @@ export interface Statistic { // data type similar to weather_data
     humin_month_min?: singleStatistic
     humin_year_max?: singleStatistic
     humin_year_min?: singleStatistic
+
+    dewin_current?: singleStatistic
+    dewin_day_max?: singleStatistic
+    dewin_day_min?: singleStatistic
+    dewin_month_max?: singleStatistic
+    dewin_month_min?: singleStatistic
+    dewin_year_max?: singleStatistic
+    dewin_year_min?: singleStatistic
+    
+    heatin_current?: singleStatistic
+    heatin_day_max?: singleStatistic
+    heatin_day_min?: singleStatistic
+    heatin_month_max?: singleStatistic
+    heatin_month_min?: singleStatistic
+    heatin_year_max?: singleStatistic
+    heatin_year_min?: singleStatistic
+
+    // need to check for other logged of weatherdata
 }
 
 export interface windStatistics { // data that you will get from the wind endpoint, not sure what it's representing, can be used to get wind sector percentage and speed

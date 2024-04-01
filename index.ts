@@ -1,10 +1,11 @@
-import type { weatherCloudId, countryCode, periodStr } from "./types/weatherCloud";
-import { chillFn, heatFn, fetchData, setCookies, parseDevicesList, getCookie } from "./utils";
-
+import type { weatherCloudId, countryCode, periodStr, regularID } from "./types/weatherCloud";
+import { chillFn, heatFn, fetchData, setCookies, parseDevicesList, getCookie, checkId } from "./utils";
 
 export async function fetchWeather(id:weatherCloudId) { // fetch general weather data
     try {
-        // if (!id || /^\d{10}$/.test(id)) throw new Error("invalid ID")
+        let type = checkId(id);
+        if (!type) throw new Error("Invalid ID");
+
         const fullReport = {
             weather: {},
             update: {},
@@ -12,56 +13,63 @@ export async function fetchWeather(id:weatherCloudId) { // fetch general weather
         };
 
         /* --------------------------- request basic data --------------------------- */
-        const data = await fetchData(`https://app.weathercloud.net/device/values?code=${id}`);
-        const lastUpdate = await fetchData(`https://app.weathercloud.net/device/ajaxupdatedate`, `d=${id}`);
-        const profile = await fetchData(`https://app.weathercloud.net/device/ajaxprofile`, `d=${id}`);
+        const data = await fetchData(`https://app.weathercloud.net/${type}/values?code=${id}`);
+        const lastUpdate = await fetchData(`https://app.weathercloud.net/${type}/ajaxupdatedate`, `d=${id}`);
+        const profile = await fetchData(`https://app.weathercloud.net/${type}/ajaxprofile`, `d=${id}`);
 
         /* --------------------------- check data presence -------------------------- */
-        if (!("temp" in data) ||
+        if (!("epoch" in data) ||
             !("update" in lastUpdate) ||
-            !("observer" in profile)
+            !("followers" in profile)
         ) throw new Error("Failed to fetch");
+
 
         /* ------------------------------ parse weather ----------------------------- */
         // calculate clouds height
-        const cloudsHeight = (data.temp > -40 && data.dew > -40) ? Math.max(0, 124.69*(data.temp - data.dew)) : -1;
+        const cloudsHeight = (data.temp && data.dew && data.temp > -40 && data.dew > -40) ? Math.max(0, 124.69*(data.temp - data.dew)) : null;
 
-        // check data validity
-        if (data.bar < 0 ||
-            data.rainrate < 0 ||
-            cloudsHeight < 0 ||
-            data.hum < 0 ||
-            data.hum > 100
-        ) throw new Error("Invalid data");
-
-        // guess current conditions based on data
-        let weatherAvg = "clear";
-        if (data.rainrate == 0) {
-            const barTH = [1005,1010,1015];
-            const fogTH = 150;
-            if (data.bar < barTH[0]) weatherAvg = "cloud";
-            else if (data.bar < barTH[1]) weatherAvg = "change";
-            else if (data.bar < barTH[2]) weatherAvg = "few";
-            
-            if (cloudsHeight < fogTH) weatherAvg += "-fog";
-        } else {
-            const rainrateTH = [2,15];
-            if (data.rainrate < rainrateTH[0]) weatherAvg = "light";
-            else if (data.rainrate < rainrateTH[1]) weatherAvg = "moderate";
-            else weatherAvg = "heavy";
+        let weatherAvg: string|null = null
+        // check data presence
+        if (data.bar && data.rainrate && data.hum) {
+            // check data validity
+            if (data.bar < 0 ||
+                data.rainrate < 0 ||
+                !cloudsHeight ||
+                data.hum < 0 ||
+                data.hum > 100
+            ) throw new Error("Invalid data");
+            // guess current conditions based on data
+            weatherAvg = "clear";
+            if (data.rainrate == 0) {
+                const barTH = [1005,1010,1015];
+                const fogTH = 150;
+                if (data.bar < barTH[0]) weatherAvg = "cloud";
+                else if (data.bar < barTH[1]) weatherAvg = "change";
+                else if (data.bar < barTH[2]) weatherAvg = "few";
+                
+                if (cloudsHeight < fogTH) weatherAvg += "-fog";
+            } else {
+                const rainrateTH = [2,15];
+                if (data.rainrate < rainrateTH[0]) weatherAvg = "light";
+                else if (data.rainrate < rainrateTH[1]) weatherAvg = "moderate";
+                else weatherAvg = "heavy";
+            }
         }
 
-        // get feel (maybe just like chill and heat but used in weather cloud code so here it is)
+        // get feel (more or less just like heat/chill but since this is optionnal we get the value no matter what)
         let feel = data.temp;
-        if (data.temp < 10) feel = chillFn(data.temp, data.wspd);
-        else if (data.temp > 26) feel = heatFn(data.temp, data.hum);
+        if (data.temp && data.wspd && data.temp < 10) feel = chillFn(data.temp, data.wspd);
+        else if (data.temp && data.hum && data.temp > 26) feel = heatFn(data.temp, data.hum);
+
+        // parse visibility if present cause for some reason it's divided by 100
+        if (typeof data.vis === "number") data.vis = data.vis*100;
         // save the added data
         const { epoch, ...dataToSave } = data;
         fullReport.weather = {
             ...dataToSave,
-            cloudsHeight,
-            weatherAvg,
-            feel
+            ...(cloudsHeight ? { cloudsHeight } : {}), // not include null data
+            ...(weatherAvg ? { weatherAvg } : {}),
+            ...(feel ? { feel } : {}),
         };
 
         /* ---------------------------- parse update time --------------------------- */
@@ -82,8 +90,10 @@ export async function fetchWeather(id:weatherCloudId) { // fetch general weather
     }
 }
 
-export async function getStationStatus(id:weatherCloudId) { // fetch the station status [NEED LOGIN]
+export async function getStationStatus(id:regularID) { // fetch the station status [NEED LOGIN] -- metar not supported by api
     try {
+        let type = checkId(id);
+        if (!type || type === "metar") throw new Error("Invalid ID");
         if ((await getCookie()).length < 1) throw new Error("Session required!");
         const data = await fetchData(`https://app.weathercloud.net/device/ajaxdevicestats`, `device=${id}`);
         if (!data || !Array.isArray(data) || !("date" in data[0]))  throw new Error("Failed to fetch");
@@ -95,7 +105,9 @@ export async function getStationStatus(id:weatherCloudId) { // fetch the station
 
 export async function getStatistics(id:weatherCloudId) {
     try {
-        const data = await fetchData(`https://app.weathercloud.net/device/stats`, `code=${id}`);
+        let type = checkId(id);
+        if (!type) throw new Error("Invalid ID");
+        const data = await fetchData(`https://app.weathercloud.net/${type}/stats?code=${id}`);
         if (!data || !("temp_current" in data))  throw new Error("Failed to fetch");
         return data;
     } catch (err) {
@@ -171,7 +183,9 @@ export async function login(mail:string, password: string, storeCredentials?: bo
 
 export async function getWind(id:weatherCloudId) {
     try {
-        const data = await fetchData(`https://app.weathercloud.net/device/wind?code=${id}`);
+        let type = checkId(id);
+        if (!type) throw new Error("Invalid ID");
+        const data = await fetchData(`https://app.weathercloud.net/${type}/wind?code=${id}`);
         if (!data || !("date" in data))  throw new Error("Failed to fetch");
 
         // calculation from weatherclouds to display graphs
@@ -198,6 +212,7 @@ export async function getWind(id:weatherCloudId) {
             calm: (calm/total) * 100, // proportion of calm wind time
             // for graphs of speed per cardinals
             wspddistData, // array of wind speeds, each one is a cardinals
+            raw: data // original values
         };
     } catch (err) {
         return { error: err };

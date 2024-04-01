@@ -1,5 +1,5 @@
 import { login } from ".";
-import type { LastUpdate, Profile, Statistic, WeatherData, Device, Uptime, DevicesList, OwnDevices, windStatistics } from "./types/weatherCloud";
+import type { LastUpdate, Profile, Statistic, WeatherData, Device, Uptime, DevicesList, OwnDevices, windStatistics, weatherCloudId } from "./types/weatherCloud";
 
 type apiReturn = LastUpdate | WeatherData | Profile | Uptime[] | Statistic | DevicesList | OwnDevices | windStatistics;
 
@@ -11,6 +11,14 @@ const session = {
 		password: ""
 	}
 };
+
+export function checkId(id:weatherCloudId) {
+	const deviceRegex = /^[0-9]{10}$/;
+	const metarRegex = /^[A-Z]{4}$/;
+	if (!id || (!deviceRegex.test(id) && !metarRegex.test(id))) return false; // check that id is valid
+	// defines the type of id
+	return metarRegex.test(id) ? "metar" : "device";
+}
 
 export async function fetchData(url:string, data:string=""):Promise<apiReturn | { error: boolean, err: any }> { // fetch data from API
     try {
