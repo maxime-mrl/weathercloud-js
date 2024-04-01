@@ -108,7 +108,7 @@ export async function getStatistics(id:weatherCloudId) {
         let type = checkId(id);
         if (!type) throw new Error("Invalid ID");
         const data = await fetchData(`https://app.weathercloud.net/${type}/stats?code=${id}`);
-        if (!data || !("temp_current" in data))  throw new Error("Failed to fetch");
+        if (!data || !("last_update" in data))  throw new Error("Failed to fetch");
         return data;
     } catch (err) {
         return { error: err };
@@ -214,6 +214,17 @@ export async function getWind(id:weatherCloudId) {
             wspddistData, // array of wind speeds, each one is a cardinals
             raw: data // original values
         };
+    } catch (err) {
+        return { error: err };
+    }
+}
+
+export async function getInfos(id:weatherCloudId) {
+    try {
+        if (!checkId(id)) throw new Error("Invalid ID");
+        const data = await fetchData(`https://app.weathercloud.net/device/info/${id}`);
+        if (!data)  throw new Error("Failed to fetch");
+        return data;
     } catch (err) {
         return { error: err };
     }

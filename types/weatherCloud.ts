@@ -104,6 +104,34 @@ export interface Uptime {
     // some other things for battery/current maybe? - only for compatible owned station
 };
 
+export interface DeviceInfo {
+    device: { // self explanatory for most of things
+        account: number|string // not sure what is this
+        status: string // neither for that
+        city: string // city
+        image: null|string // if there is a banner image dor the station, url of that image
+        isWebcam: boolean // is there a webcam
+        favorite: boolean // is fav (false when logged out)
+        social: boolean // is there a twitter account linked
+        altitude: string // elevation of the station
+        update: number // seconds since last update
+    }
+    values: { // some of the data from weatherdata but not all - in string format
+        temp: string
+        hum: string
+        dew: string
+        wspdavg: string
+        wdiravg: string
+        bar: string
+        rain: string
+        rainrate?: string
+        solarrad?: string
+        uvi?: string
+        vis?: string
+    }
+}
+
+
 export interface Statistic { // data type similar to weather_data
     last_update: number // time of the last update (unix seconds)
     temp_current: singleStatistic
@@ -265,7 +293,7 @@ export interface Statistic { // data type similar to weather_data
 }
 
 export interface windStatistics { // data that you will get from the wind endpoint, not sure what it's representing, can be used to get wind sector percentage and speed
-    date: number, // unix time of the data
+    date: number // unix time of the data
     values: {
         sum: number // not sure what is it
         scale: number[] // scale[0] represent calm wind, others wind (force?)

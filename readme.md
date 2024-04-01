@@ -141,6 +141,10 @@ This is a list of all known endpoints. There are more existing (mainly logged on
    - [URl] `app.weathercloud.net/device/wind?code={id}`
    - [DATA] None
    - [RETURN] interface WindStatistic _not sure exactly what is this but enough to use it see function getWind_
+ - Get device general infos:
+   - [URL] `app.weathercloud.net/device/info/{id}`
+   - [DATA] none
+   - [RETURN] Object (interface DeviceInfo)
 
 **LOGIN REQUIRED**
 
@@ -172,10 +176,6 @@ This is a list of all known endpoints. There are more existing (mainly logged on
  - know if a device is favorite
    - [URL] `app.weathercloud.net/device/ajaxfavoritesnumber`
    - [DATA] `d={id}`
-   - [RETURN] WIP
- - Get device general infos:
-   - [URL] `app.weathercloud.net/device/info/{id}`
-   - [DATA] none
    - [RETURN] WIP
  - Map related
    - `app.weathercloud.ne/map/metars` && `app.weathercloud.ne/map/bgdevices`
