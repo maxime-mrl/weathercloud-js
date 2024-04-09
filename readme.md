@@ -158,9 +158,17 @@ This is a list of all known endpoints. There are more existing (mainly logged on
    - [DATA] none
    - [RETURN] { device: Device[], favorites: Device[] }
    - [LOGIN] true
+ - Follow a device
+   - [URL] `app.weathercloud.net/device/ajaxfavorite`
+   - [DATA] `device={id}&delete="0|1"`
+   - [RETURN] object (interface FavoriteResponse)
+ - know if a device is favorite
+   - [URL] `app.weathercloud.net/device/ajaxfavoritesnumber`
+   - [DATA] `d={id}`
+   - [RETURN] text (type isFavoriteresponse)
 
 
-**NOT DEFINED (WIP)**
+**NOT DEFINED YET (more routes in V2)**
  - Get your history (probably w/ cookies so not very usefull)
    - [URL] `app.weathercloud.net/page/lastviews`
    - [DATA] None
@@ -168,14 +176,6 @@ This is a list of all known endpoints. There are more existing (mainly logged on
  - Get graph data history
    - [URl] `app.weathercloud.net/device/evolution`
    - [DATA] `device=${id}; variable=${variablecode(101/201/541/641/701/801/811/1001/1101/6011/6501)}; period=${variableday(day/week/month)}; WEATHERCLOUD_CSRF_TOKEN=${token?}`
-   - [RETURN] WIP
- - Follow a device
-   - [URL] `app.weathercloud.net/device/ajaxfavorite`
-   - [DATA] `device={id}; delete="0|1"`
-   - [RETURN] WIP
- - know if a device is favorite
-   - [URL] `app.weathercloud.net/device/ajaxfavoritesnumber`
-   - [DATA] `d={id}`
    - [RETURN] WIP
  - Map related
    - `app.weathercloud.ne/map/metars` && `app.weathercloud.ne/map/bgdevices`

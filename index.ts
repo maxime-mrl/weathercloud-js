@@ -18,7 +18,7 @@ export async function fetchWeather(id:weatherCloudId) { // fetch general weather
         const profile = await fetchData(`https://app.weathercloud.net/${type}/ajaxprofile`, `d=${id}`);
 
         /* --------------------------- check data presence -------------------------- */
-        if (!("epoch" in data) ||
+        if (!data || !("epoch" in data) ||
             !("update" in lastUpdate) ||
             !("followers" in profile)
         ) throw new Error("Failed to fetch");
@@ -227,5 +227,41 @@ export async function getInfos(id:weatherCloudId) {
         return data;
     } catch (err) {
         return { error: err };
+    }
+}
+
+export async function isFavorite(id:weatherCloudId) {
+    try {
+        if (!checkId(id)) throw new Error("Invalid ID");
+        const data = await fetchData(`https://app.weathercloud.net/device/ajaxfavoritesnumber`, `d=${id}`);
+        if (!("favoriteStatus" in data)) throw new Error("Failed to fetch");
+        return data.favoriteStatus == "1" ? true : false;
+    } catch (err) {
+        return { error: err };
+    }
+}
+
+export async function addFavorite(id:weatherCloudId) {
+    try {
+        if (!checkId(id)) throw new Error("Invalid ID");
+        if (await isFavorite(id)) return true;
+        const data = await fetchData(`https://app.weathercloud.net/device/ajaxfavorite`, `device=${id}&delete=0`);
+        if (!("favorites" in data) || !("success" in data)) throw new Error("Failed to fetch");
+        return data.success;
+    } catch (err) {
+        return false;
+    }
+}
+
+export async function removeFavorite(id:weatherCloudId) {
+    try {
+        if (!checkId(id)) throw new Error("Invalid ID");
+        if (!(await isFavorite(id))) return true;
+        console.log("ok")
+        const data = await fetchData(`https://app.weathercloud.net/device/ajaxfavorite`, `device=${id}&delete=1`);
+        if (!("favorites" in data) || !("success" in data)) throw new Error("Failed to fetch");
+        return data.success;
+    } catch (err) {
+        return false;
     }
 }

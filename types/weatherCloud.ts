@@ -14,6 +14,14 @@ export type weatherCloudId = regularID | metarID;
 export type countryCode = `${Uppercase<string>}${Uppercase<string>}`;
 export type periodStr = "day"|"week"|"month"|"year"|"all";
 
+export type isFavoriteResponse = "0"|"1";
+
+export interface FavoriteResponse {
+    type: "add"|"delete", // type of action
+    success: boolean,
+    favorites: 0|1 // old favorite status (as boolean)
+}
+
 export interface WeatherData {
     // included most of the time
     epoch: number // time of the last update (unix seconds)

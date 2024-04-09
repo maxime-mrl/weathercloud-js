@@ -1,7 +1,19 @@
 import { login } from ".";
-import type { LastUpdate, Profile, Statistic, WeatherData, Device, Uptime, DevicesList, OwnDevices, windStatistics, weatherCloudId } from "./types/weatherCloud";
+import type { LastUpdate, Profile, Statistic, WeatherData, Device, Uptime, DevicesList, OwnDevices, windStatistics, weatherCloudId, DeviceInfo, isFavoriteResponse, FavoriteResponse } from "./types/weatherCloud";
 
-type apiReturn = LastUpdate | WeatherData | Profile | Uptime[] | Statistic | DevicesList | OwnDevices | windStatistics;
+type apiReturn = 
+	LastUpdate |
+	WeatherData |
+	Profile |
+	Uptime[] |
+	Statistic |
+	DevicesList |
+	OwnDevices |
+	windStatistics |
+	DeviceInfo |
+	{ favoriteStatus: isFavoriteResponse } |
+	FavoriteResponse
+;
 
 const session = {
 	cookie: "", // actual cookie
@@ -31,7 +43,9 @@ export async function fetchData(url:string, data:string=""):Promise<apiReturn | 
 			},
 			body: data
 		});
-        return await resp.json();
+		const respData = await resp.json();
+		if (respData && typeof respData === "string" && /0|1/.test(respData)) return { favoriteStatus: respData as isFavoriteResponse }
+		else return respData;
     } catch (err) {
         return { error: true, err }
     }
