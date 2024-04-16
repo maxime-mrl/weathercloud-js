@@ -37,12 +37,12 @@ API Start from `https://app.weathercloud.net/` URL
 method for every request is POST _(note that some is originally used by weatherCloud with GET but everything work as POST)._
 
 Needed headers are:
-```json
+```ts
     headers: {
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         "X-Requested-With": "XMLHttpRequest",
-        "cookie": "optionnal for logged route - session cookie"
-    },
+        "cookie": "COOKIE" // optionnal / for logged route - session cookie
+    }
 ```
 
 the data is passed either as urlencoded or in the request body. This will be precised for every endpoints.
@@ -79,11 +79,11 @@ Use the table of content to navigate (seriously), all return infos are detailled
 Full URL: `app.weathercloud.net/signin`
 
 **DATA:** in body - Formdata (URLSearchParams):
-```json
+```ts
 {
-    "entity": "YOUR_MAIL",
-    "password": "YOUR_PASSWORD",
-    "remeberMe": 0 | 1
+    entity: "YOUR_MAIL",
+    password: "YOUR_PASSWORD",
+    remeberMe: 0 | 1
 }
 ```
 
@@ -104,44 +104,44 @@ Headers:
 Full URL: `app.weathercloud.net/device/values?code={id}`
 
 **DATA:** in URL - urlEncoded: 
-```json
-"code": "DEVICE_ID"
+```ts
+code: "DEVICE_ID"
 ```
 
 **Response**
 
 Body:
-```json
+```ts
 {
     // included most of the time
-    "epoch": "number", // time of the last update (unix seconds)
-    "bar": "number", // pressure (hPa)
-    "wdir": "number", // wind direction (degree)
-    "wdiravg": "number", // average wind direction (degree)
-    "wspd": "number", // wind speed (m/s)
-    "wspdhi": "number", // wind gust (m/s)
-    "wspdavg": "number", // average wind speed (m/s)
-    "rainrate": "number", // rainrate (mm/hour)
-    "rain": "number", // rained today (mm)
-    "temp": "number", // temperature (°C)
-    "hum": "number", // humidity (%)
-    "dew": "number", // dew point (°C)
+    epoch: number, // time of the last update (unix seconds)
+    bar: number, // pressure (hPa)
+    wdir: number, // wind direction (degree)
+    wdiravg: number, // average wind direction (degree)
+    wspd: number, // wind speed (m/s)
+    wspdhi: number, // wind gust (m/s)
+    wspdavg: number, // average wind speed (m/s)
+    rainrate: number, // rainrate (mm/hour)
+    rain: number, // rained today (mm)
+    temp: number, // temperature (°C)
+    hum: number, // humidity (%)
+    dew: number, // dew point (°C)
     
     // optional
-    "temp02": "number", // secondary temperature (°C) (not sure what nor why dosen't seems to be used on original website)
-    "hum02": "number",  // secondary humidity (%) (also not used on website)
-    "chill": "number", // wind-chill or how much colder will it feels w/ wind
-    "heat": "number", // heat or how much will it feel hotter with humidity -- not included by every stations
-    "thw": "number", // Temperature-Humidity-Wind Index or feel like
-    "solarrad": "number", // solar radiation (W/m²)
-    "uvi": "number", // UV index
-    "vis": "number", // visibility (100 of meters)
+    temp02: number, // secondary temperature (°C) (not sure what nor why dosen't seems to be used on original website)
+    hum02: number,  // secondary humidity (%) (also not used on website)
+    chill: number, // wind-chill or how much colder will it feels w/ wind
+    heat: number, // heat or how much will it feel hotter with humidity -- not included by every stations
+    thw: number, // Temperature-Humidity-Wind Index or feel like
+    solarrad: number, // solar radiation (W/m²)
+    uvi: number, // UV index
+    vis: number, // visibility (100 of meters)
 
     // logged owner only (possible to get from devices list as a guest)
-    "tempin": "number", // Inside temperature (°C)
-    "humin": "number", // Inside humidity (%)
-    "dewin": "number", // Inside dew point (°C)
-    "heatin": "number", // inside heat value
+    tempin: number, // Inside temperature (°C)
+    humin: number, // Inside humidity (%)
+    dewin: number, // Inside dew point (°C)
+    heatin: number, // inside heat value
 }
 ```
 
@@ -153,566 +153,566 @@ Body:
 Full URL: `app.weathercloud.net/device/stats`
 
 **DATA:** Request body: 
-```json 
-"code": "DEVICE_ID",
+```ts 
+code: "DEVICE_ID",
 ```
 
 **Response**
-```json
+```ts
 { // data type similar to weather_data
-    "last_update": "number", // time of the last update (unix seconds)
-    "temp_current": [
-        "number", // time of measure (unizx seconds)
-        "number", // value measured (refer to "device/stats" to see unit etc.)
+    last_update: number, // time of the last update (unix seconds)
+    temp_current: [
+        number, // time of measure (unizx seconds)
+        number, // value measured (refer to "device/stats" to see unit etc.)
     ],
-    "temp_day_max": [
-        "number", // will not repeat for each one, you get the idea
-        "number"
+    temp_day_max: [
+        number, // will not repeat for each one, you get the idea
+        number
     ],
-    "temp_day_min": [
-        "number", 
-        "number"
+    temp_day_min: [
+        number, 
+        number
     ],
-    "temp_month_max": [
-        "number", 
-        "number"
+    temp_month_max: [
+        number, 
+        number
     ],
-    "temp_month_min": [
-        "number", 
-        "number"
+    temp_month_min: [
+        number, 
+        number
     ],
-    "temp_year_max": [
-        "number", 
-        "number"
+    temp_year_max: [
+        number, 
+        number
     ],
-    "temp_year_min": [
-        "number", 
-        "number"
-    ],
-
-    "dew_current": [
-        "number", 
-        "number"
-    ],
-    "dew_day_max": [
-        "number", 
-        "number"
-    ],
-    "dew_day_min": [
-        "number", 
-        "number"
-    ],
-    "dew_month_max": [
-        "number", 
-        "number"
-    ],
-    "dew_month_min": [
-        "number", 
-        "number"
-    ],
-    "dew_year_max": [
-        "number", 
-        "number"
-    ],
-    "dew_year_min": [
-        "number", 
-        "number"
-    ],
-    
-    "hum_current": [
-        "number", 
-        "number"
-    ],
-    "hum_day_max": [
-        "number", 
-        "number"
-    ],
-    "hum_day_min": [
-        "number", 
-        "number"
-    ],
-    "hum_month_max": [
-        "number", 
-        "number"
-    ],
-    "hum_month_min": [
-        "number", 
-        "number"
-    ],
-    "hum_year_max": [
-        "number", 
-        "number"
-    ],
-    "hum_year_min": [
-        "number", 
-        "number"
-    ],
-    
-    "bar_current": [
-        "number", 
-        "number"
-    ],
-    "bar_day_max": [
-        "number", 
-        "number"
-    ],
-    "bar_day_min": [
-        "number", 
-        "number"
-    ],
-    "bar_month_max": [
-        "number", 
-        "number"
-    ],
-    "bar_month_min": [
-        "number", 
-        "number"
-    ],
-    "bar_year_max": [
-        "number", 
-        "number"
-    ],
-    "bar_year_min": [
-        "number", 
-        "number"
-    ],
-    
-    "wspdavg_current": [
-        "number", 
-        "number"
-    ],
-    "wspdavg_day_max": [
-        "number", 
-        "number"
-    ],
-    "wspdavg_day_min": [
-        "number", 
-        "number"
-    ],
-    "wspdavg_month_max": [
-        "number", 
-        "number"
-    ],
-    "wspdavg_month_min": [
-        "number", 
-        "number"
-    ],
-    "wspdavg_year_max": [
-        "number", 
-        "number"
-    ],
-    "wspdavg_year_min": [
-        "number", 
-        "number"
-    ],
-    
-    "wspdhi_current": [
-        "number", 
-        "number"
-    ],
-    "wspdhi_day_max": [
-        "number", 
-        "number"
-    ],
-    "wspdhi_day_min": [
-        "number", 
-        "number"
-    ],
-    "wspdhi_month_max": [
-        "number", 
-        "number"
-    ],
-    "wspdhi_month_min": [
-        "number", 
-        "number"
-    ],
-    "wspdhi_year_max": [
-        "number", 
-        "number"
-    ],
-    "wspdhi_year_min": [
-        "number", 
-        "number"
-    ],
-    
-    "wdiravg_current": [
-        "number", 
-        "number"
-    ],
-    "wdiravg_day_max": [
-        "number", 
-        "number"
-    ],
-    "wdiravg_day_min": [
-        "number", 
-        "number"
-    ],
-    "wdiravg_month_max": [
-        "number", 
-        "number"
-    ],
-    "wdiravg_month_min": [
-        "number", 
-        "number"
-    ],
-    "wdiravg_year_max": [
-        "number", 
-        "number"
-    ],
-    "wdiravg_year_min": [
-        "number", 
-        "number"
+    temp_year_min: [
+        number, 
+        number
     ],
 
-    "rain_current": [
-        "number", 
-        "number"
+    dew_current: [
+        number, 
+        number
     ],
-    "rain_day_max": [
-        "number", 
-        "number"
+    dew_day_max: [
+        number, 
+        number
     ],
-    "rain_day_total": [
-        "number", 
-        "number"
+    dew_day_min: [
+        number, 
+        number
     ],
-    "rain_month_max": [
-        "number", 
-        "number"
+    dew_month_max: [
+        number, 
+        number
     ],
-    "rain_month_total": [
-        "number", 
-        "number"
+    dew_month_min: [
+        number, 
+        number
     ],
-    "rain_year_max": [
-        "number", 
-        "number"
+    dew_year_max: [
+        number, 
+        number
     ],
-    "rain_year_total": [
-        "number", 
-        "number"
+    dew_year_min: [
+        number, 
+        number
+    ],
+    
+    hum_current: [
+        number, 
+        number
+    ],
+    hum_day_max: [
+        number, 
+        number
+    ],
+    hum_day_min: [
+        number, 
+        number
+    ],
+    hum_month_max: [
+        number, 
+        number
+    ],
+    hum_month_min: [
+        number, 
+        number
+    ],
+    hum_year_max: [
+        number, 
+        number
+    ],
+    hum_year_min: [
+        number, 
+        number
+    ],
+    
+    bar_current: [
+        number, 
+        number
+    ],
+    bar_day_max: [
+        number, 
+        number
+    ],
+    bar_day_min: [
+        number, 
+        number
+    ],
+    bar_month_max: [
+        number, 
+        number
+    ],
+    bar_month_min: [
+        number, 
+        number
+    ],
+    bar_year_max: [
+        number, 
+        number
+    ],
+    bar_year_min: [
+        number, 
+        number
+    ],
+    
+    wspdavg_current: [
+        number, 
+        number
+    ],
+    wspdavg_day_max: [
+        number, 
+        number
+    ],
+    wspdavg_day_min: [
+        number, 
+        number
+    ],
+    wspdavg_month_max: [
+        number, 
+        number
+    ],
+    wspdavg_month_min: [
+        number, 
+        number
+    ],
+    wspdavg_year_max: [
+        number, 
+        number
+    ],
+    wspdavg_year_min: [
+        number, 
+        number
+    ],
+    
+    wspdhi_current: [
+        number, 
+        number
+    ],
+    wspdhi_day_max: [
+        number, 
+        number
+    ],
+    wspdhi_day_min: [
+        number, 
+        number
+    ],
+    wspdhi_month_max: [
+        number, 
+        number
+    ],
+    wspdhi_month_min: [
+        number, 
+        number
+    ],
+    wspdhi_year_max: [
+        number, 
+        number
+    ],
+    wspdhi_year_min: [
+        number, 
+        number
+    ],
+    
+    wdiravg_current: [
+        number, 
+        number
+    ],
+    wdiravg_day_max: [
+        number, 
+        number
+    ],
+    wdiravg_day_min: [
+        number, 
+        number
+    ],
+    wdiravg_month_max: [
+        number, 
+        number
+    ],
+    wdiravg_month_min: [
+        number, 
+        number
+    ],
+    wdiravg_year_max: [
+        number, 
+        number
+    ],
+    wdiravg_year_min: [
+        number, 
+        number
+    ],
+
+    rain_current: [
+        number, 
+        number
+    ],
+    rain_day_max: [
+        number, 
+        number
+    ],
+    rain_day_total: [
+        number, 
+        number
+    ],
+    rain_month_max: [
+        number, 
+        number
+    ],
+    rain_month_total: [
+        number, 
+        number
+    ],
+    rain_year_max: [
+        number, 
+        number
+    ],
+    rain_year_total: [
+        number, 
+        number
     ],
     
     // optional
-    "wspd_current": [
-        "number", 
-        "number"
+    wspd_current: [
+        number, 
+        number
     ],
-    "wspd_day_max": [
-        "number", 
-        "number"
+    wspd_day_max: [
+        number, 
+        number
     ],
-    "wspd_day_min": [
-        "number", 
-        "number"
+    wspd_day_min: [
+        number, 
+        number
     ],
-    "wspd_month_max": [
-        "number", 
-        "number"
+    wspd_month_max: [
+        number, 
+        number
     ],
-    "wspd_month_min": [
-        "number", 
-        "number"
+    wspd_month_min: [
+        number, 
+        number
     ],
-    "wspd_year_max": [
-        "number", 
-        "number"
+    wspd_year_max: [
+        number, 
+        number
     ],
-    "wspd_year_min": [
-        "number", 
-        "number"
+    wspd_year_min: [
+        number, 
+        number
     ],
     
-    "rainrate_current": [
-        "number", 
-        "number"
+    rainrate_current: [
+        number, 
+        number
     ],
-    "rainrate_day_max": [
-        "number", 
-        "number"
+    rainrate_day_max: [
+        number, 
+        number
     ],
-    "rainrate_day_min": [
-        "number", 
-        "number"
+    rainrate_day_min: [
+        number, 
+        number
     ],
-    "rainrate_month_max": [
-        "number", 
-        "number"
+    rainrate_month_max: [
+        number, 
+        number
     ],
-    "rainrate_month_min": [
-        "number", 
-        "number"
+    rainrate_month_min: [
+        number, 
+        number
     ],
-    "rainrate_year_max": [
-        "number", 
-        "number"
+    rainrate_year_max: [
+        number, 
+        number
     ],
-    "rainrate_year_min": [
-        "number", 
-        "number"
+    rainrate_year_min: [
+        number, 
+        number
     ],
 
-    "solarrad_current": [
-        "number", 
-        "number"
+    solarrad_current: [
+        number, 
+        number
     ],
-    "solarrad_day_max": [
-        "number", 
-        "number"
+    solarrad_day_max: [
+        number, 
+        number
     ],
-    "solarrad_day_hours": [
-        "number", 
-        "number"
+    solarrad_day_hours: [
+        number, 
+        number
     ],
-    "solarrad_month_max": [
-        "number", 
-        "number"
+    solarrad_month_max: [
+        number, 
+        number
     ],
-    "solarrad_month_hours": [
-        "number", 
-        "number"
+    solarrad_month_hours: [
+        number, 
+        number
     ],
-    "solarrad_year_max": [
-        "number", 
-        "number"
+    solarrad_year_max: [
+        number, 
+        number
     ],
-    "solarrad_year_hours": [
-        "number", 
-        "number"
-    ],
-    
-    "uvi_current": [
-        "number", 
-        "number"
-    ],
-    "uvi_day_max": [
-        "number", 
-        "number"
-    ],
-    "uvi_day_min": [
-        "number", 
-        "number"
-    ],
-    "uvi_month_max": [
-        "number", 
-        "number"
-    ],
-    "uvi_month_min": [
-        "number", 
-        "number"
-    ],
-    "uvi_year_max": [
-        "number", 
-        "number"
-    ],
-    "uvi_year_min": [
-        "number", 
-        "number"
+    solarrad_year_hours: [
+        number, 
+        number
     ],
     
-    "chill_current": [
-        "number", 
-        "number"
+    uvi_current: [
+        number, 
+        number
     ],
-    "chill_day_max": [
-        "number", 
-        "number"
+    uvi_day_max: [
+        number, 
+        number
     ],
-    "chill_day_min": [
-        "number", 
-        "number"
+    uvi_day_min: [
+        number, 
+        number
     ],
-    "chill_month_max": [
-        "number", 
-        "number"
+    uvi_month_max: [
+        number, 
+        number
     ],
-    "chill_month_min": [
-        "number", 
-        "number"
+    uvi_month_min: [
+        number, 
+        number
     ],
-    "chill_year_max": [
-        "number", 
-        "number"
+    uvi_year_max: [
+        number, 
+        number
     ],
-    "chill_year_min": [
-        "number", 
-        "number"
+    uvi_year_min: [
+        number, 
+        number
     ],
     
-    "heat_current": [
-        "number", 
-        "number"
+    chill_current: [
+        number, 
+        number
     ],
-    "heat_day_max": [
-        "number", 
-        "number"
+    chill_day_max: [
+        number, 
+        number
     ],
-    "heat_day_min": [
-        "number", 
-        "number"
+    chill_day_min: [
+        number, 
+        number
     ],
-    "heat_month_max": [
-        "number", 
-        "number"
+    chill_month_max: [
+        number, 
+        number
     ],
-    "heat_month_min": [
-        "number", 
-        "number"
+    chill_month_min: [
+        number, 
+        number
     ],
-    "heat_year_max": [
-        "number", 
-        "number"
+    chill_year_max: [
+        number, 
+        number
     ],
-    "heat_year_min": [
-        "number", 
-        "number"
+    chill_year_min: [
+        number, 
+        number
+    ],
+    
+    heat_current: [
+        number, 
+        number
+    ],
+    heat_day_max: [
+        number, 
+        number
+    ],
+    heat_day_min: [
+        number, 
+        number
+    ],
+    heat_month_max: [
+        number, 
+        number
+    ],
+    heat_month_min: [
+        number, 
+        number
+    ],
+    heat_year_max: [
+        number, 
+        number
+    ],
+    heat_year_min: [
+        number, 
+        number
     ],
     
     // visibility (for some reason divided by 100)
-    "vis_current": [
-        "number", 
-        "number"
+    vis_current: [
+        number, 
+        number
     ],
-    "vis_day_max": [
-        "number", 
-        "number"
+    vis_day_max: [
+        number, 
+        number
     ],
-    "vis_day_min": [
-        "number", 
-        "number"
+    vis_day_min: [
+        number, 
+        number
     ],
-    "vis_month_max": [
-        "number", 
-        "number"
+    vis_month_max: [
+        number, 
+        number
     ],
-    "vis_month_min": [
-        "number", 
-        "number"
+    vis_month_min: [
+        number, 
+        number
     ],
-    "vis_year_max": [
-        "number", 
-        "number"
+    vis_year_max: [
+        number, 
+        number
     ],
-    "vis_year_min": [
-        "number", 
-        "number"
+    vis_year_min: [
+        number, 
+        number
     ],
 
     // logged only
-    "tempin_current": [
-        "number", 
-        "number"
+    tempin_current: [
+        number, 
+        number
     ],
-    "tempin_day_max": [
-        "number", 
-        "number"
+    tempin_day_max: [
+        number, 
+        number
     ],
-    "tempin_day_min": [
-        "number", 
-        "number"
+    tempin_day_min: [
+        number, 
+        number
     ],
-    "tempin_month_max": [
-        "number", 
-        "number"
+    tempin_month_max: [
+        number, 
+        number
     ],
-    "tempin_month_min": [
-        "number", 
-        "number"
+    tempin_month_min: [
+        number, 
+        number
     ],
-    "tempin_year_max": [
-        "number", 
-        "number"
+    tempin_year_max: [
+        number, 
+        number
     ],
-    "tempin_year_min": [
-        "number", 
-        "number"
+    tempin_year_min: [
+        number, 
+        number
     ],
     
-    "humin_current": [
-        "number", 
-        "number"
+    humin_current: [
+        number, 
+        number
     ],
-    "humin_day_max": [
-        "number", 
-        "number"
+    humin_day_max: [
+        number, 
+        number
     ],
-    "humin_day_min": [
-        "number", 
-        "number"
+    humin_day_min: [
+        number, 
+        number
     ],
-    "humin_month_max": [
-        "number", 
-        "number"
+    humin_month_max: [
+        number, 
+        number
     ],
-    "humin_month_min": [
-        "number", 
-        "number"
+    humin_month_min: [
+        number, 
+        number
     ],
-    "humin_year_max": [
-        "number", 
-        "number"
+    humin_year_max: [
+        number, 
+        number
     ],
-    "humin_year_min": [
-        "number", 
-        "number"
+    humin_year_min: [
+        number, 
+        number
     ],
 
-    "dewin_current": [
-        "number", 
-        "number"
+    dewin_current: [
+        number, 
+        number
     ],
-    "dewin_day_max": [
-        "number", 
-        "number"
+    dewin_day_max: [
+        number, 
+        number
     ],
-    "dewin_day_min": [
-        "number", 
-        "number"
+    dewin_day_min: [
+        number, 
+        number
     ],
-    "dewin_month_max": [
-        "number", 
-        "number"
+    dewin_month_max: [
+        number, 
+        number
     ],
-    "dewin_month_min": [
-        "number", 
-        "number"
+    dewin_month_min: [
+        number, 
+        number
     ],
-    "dewin_year_max": [
-        "number", 
-        "number"
+    dewin_year_max: [
+        number, 
+        number
     ],
-    "dewin_year_min": [
-        "number", 
-        "number"
+    dewin_year_min: [
+        number, 
+        number
     ],
     
-    "heatin_current": [
-        "number", 
-        "number"
+    heatin_current: [
+        number, 
+        number
     ],
-    "heatin_day_max": [
-        "number", 
-        "number"
+    heatin_day_max: [
+        number, 
+        number
     ],
-    "heatin_day_min": [
-        "number", 
-        "number"
+    heatin_day_min: [
+        number, 
+        number
     ],
-    "heatin_month_max": [
-        "number", 
-        "number"
+    heatin_month_max: [
+        number, 
+        number
     ],
-    "heatin_month_min": [
-        "number", 
-        "number"
+    heatin_month_min: [
+        number, 
+        number
     ],
-    "heatin_year_max": [
-        "number", 
-        "number"
+    heatin_year_max: [
+        number, 
+        number
     ],
-    "heatin_year_min": [
-        "number", 
-        "number"
+    heatin_year_min: [
+        number, 
+        number
     ]
 }
 ```
@@ -725,19 +725,19 @@ Full URL: `app.weathercloud.net/device/stats`
 Full URL: `app.weathercloud.net/device/wind?code={id}`
 
 **DATA:** in URL - urlEncoded: 
-```json
-"code": "DEVICE_ID"
+```ts
+code: "DEVICE_ID"
 ```
 
 **Response**
-```json
+```ts
 [
     { // data that you will get from the wind endpoint, not sure what it's representing, can be used to get wind sector percentage and speed
-        "date": "number", // unix time of the data
-        "values": {
-            "sum": "number", // not sure what is it
-            "scale": [
-                "number",
+        date: number, // unix time of the data
+        values: {
+            sum: number, // not sure what is it
+            scale: [
+                number,
                 "..."
             ] // scale[0] represent calm wind, others wind (force?)
         } 
@@ -753,36 +753,36 @@ Full URL: `app.weathercloud.net/device/wind?code={id}`
 Full URL: `app.weathercloud.net/device/info/{id}`
 
 **DATA:** in URL 
-```json
+```ts
 "DEVICE_ID"
 ```
 
 **Response**
-```json
+```ts
 {
-    "device": {
-        "account": "number | string", // not sure what is this
-        "status": "string", // neither for that
-        "city": "string", // city
-        "image": "null | string", // optional url of device banner image
-        "isWebcam": "boolean", // is there a webcam
-        "favorite": "boolean", // is fav (false when logged out)
-        "social": "boolean", // is there a twitter account linked
-        "altitude": "string", // elevation of the station
-        "update": "number" // seconds since last update
+    device: {
+        account: number | string, // not sure what is this
+        status: string, // neither for that
+        city: string, // city
+        image: null | string, // optional url of device banner image
+        isWebcam: boolean, // is there a webcam
+        favorite: boolean, // is fav (false when logged out)
+        social: boolean, // is there a twitter account linked
+        altitude: string, // elevation of the station
+        update: number // seconds since last update
     },
-    "values": { // some of the devices weather values but not all - in string format because.
-        "temp": "string",
-        "hum": "string",
-        "dew": "string",
-        "wspdavg": "string",
-        "wdiravg": "string",
-        "bar": "string",
-        "rain": "string",
-        "rainrate": "string",
-        "solarrad": "string",
-        "uvi": "string",
-        "vis": "string"
+    values: { // some of the devices weather values but not all - in string format because.
+        temp: string,
+        hum: string,
+        dew: string,
+        wspdavg: string,
+        wdiravg: string,
+        bar: string,
+        rain: string,
+        rainrate: string,
+        solarrad: string,
+        uvi: string,
+        vis: string
     }
 }
 ```
@@ -795,26 +795,26 @@ Full URL: `app.weathercloud.net/device/info/{id}`
 Full URL: `app.weathercloud.net/device/ajaxprofile`
 
 **DATA:** Request body: 
-```json 
-"d": "DEVICE_ID"
+```ts 
+d: "DEVICE_ID"
 ```
 
 **Response**
-```json
+```ts
 {
     // METAR and Devices
-    "followers": { // follower of this station
-        "number": "string" // (this is a number in a string because yes)
+    followers: { // follower of this station
+        number: string // (this is a number in a string because yes)
     },
     // Devices only
-    "observer": { // owner infos
-        "name": "string",
-        "nickname": "string",
-        "company": "string"
+    observer: { // owner infos
+        name: string,
+        nickname: string,
+        company: string
     },
-    "device": { // device informations
-        "brand": "string",
-        "model": "string"
+    device: { // device informations
+        brand: string,
+        model: string
     }
 }
 ```
@@ -829,16 +829,16 @@ Full URL: `app.weathercloud.net/device/ajaxprofile`
 Full URL: `app.weathercloud.net/device/ajaxdevicestats`
 
 **DATA:** Request body: 
-```json 
-"device": "DEVICE_ID"
+```ts 
+device: "DEVICE_ID"
 ```
 
 **Response**
-```json
+```ts
 [
     {
-        "date": "number", // day (unix seconds)
-        "value": "number" // uptime (%)
+        date: number, // day (unix seconds)
+        value: number // uptime (%)
         // some other things for battery/current maybe? - only for compatible and owned station
     } // repeated 31 times for each days
 ]
@@ -852,15 +852,15 @@ Full URL: `app.weathercloud.net/device/ajaxdevicestats`
 Full URL: `app.weathercloud.net/device/ajaxupdatedate`
 
 **DATA:** Request body: 
-```json 
-"d": "DEVICE_ID"
+```ts 
+d: "DEVICE_ID"
 ```
 **Response**
-```json
+```ts
 {
-    "update": "number", // time elapsed since the last update (seconds)
-    "server_time": "number", // server time when requested (unix seconds)
-    "status": "string", // "2" is normal "0" is a special state where update is the only thing worth displaying on website. Others code means some kind of errors
+    update: number, // time elapsed since the last update (seconds)
+    server_time: number, // server time when requested (unix seconds)
+    status: string, // "2" is normal "0" is a special state where update is the only thing worth displaying on website. Others code means some kind of errors
 }
 ```
 
@@ -874,19 +874,19 @@ Full URL: `app.weathercloud.net/device/ajaxupdatedate`
 Full URL: `app.weathercloud.net/device/ajaxfavorite`
 
 **DATA:** Request body: 
-```json 
+```ts 
 {
-    "device": "DEVICE_ID",
-    "delete":  0 | 1 
+    device: "DEVICE_ID",
+    delete:  0 | 1 
 }
 ```
 
 **Response**
-```json
+```ts
 {
-    "type": "add" | "delete", // type of action
-    "success": "boolean",
-    "favorites": 0 | 1 // old favorite status (0 = false; 1 = true)
+    type: "add" | "delete", // type of action
+    success: boolean,
+    favorites: 0 | 1 // old favorite status (0 = false; 1 = true)
 }
 ```
 
@@ -900,12 +900,12 @@ Full URL: `app.weathercloud.net/device/ajaxfavorite`
 Full URL: `app.weathercloud.net/device/ajaxfavoritesnumber`
 
 **DATA:** Request body: 
-```json 
-"d": "DEVICE_ID"
+```ts 
+d: "DEVICE_ID"
 ```
 
 **Response**
-```json
+```ts
 "0" | "1"
 ```
 
@@ -917,36 +917,36 @@ Full URL: `app.weathercloud.net/device/ajaxfavoritesnumber`
 Full URL: `app.weathercloud.net/page/popular/country/{countryCode}/period/{period}`
 
 **DATA:** in URL: 
-```json
+```ts
 {
-    "countryCode": "string", // example FR for France
-    "period": "day" | "week" | "month" | "year" | "all" // period for counting popularity
+    countryCode: string, // example FR for France
+    period: "day" | "week" | "month" | "year" | "all" // period for counting popularity
 }
 ```
 **Response**
-```json
+```ts
 [
     {
-        "type": "device|metar",
-        "code": "weatherCloudId", // station ID
-        "name": "string", // station name
+        type: "device" | "metar",
+        code: string, // station ID
+        name: string, // station name
 
         // position of the station
-        "city": "string",
-        "latitude": "string",
-        "longitude": "string",
-        "elevation": "string", // elevation in decimeters (meters*10)
+        city: string,
+        latitude: string,
+        longitude: string,
+        elevation: string, // elevation in decimeters (meters*10)
 
-        "image": "null | string", // optional url of device banner image
-        "account": "number | string", // not sure what is this
-        "isFavorite": "boolean", // with account cookie tell you if you favorited this station
-        "update": "number", // seconds elapsed since last update
-        "values": {
-            "...": "..."
+        image: null | string, // optional url of device banner image
+        account: number | string, // not sure what is this
+        isFavorite: boolean, // with account cookie tell you if you favorited this station
+        update: number, // seconds elapsed since last update
+        values: {
+            "..."
             // just like /device/values return but as string for some reason
         },
-        "status": "string",
-        "data": "string" // number of views
+        status: string,
+        data: string // number of views
     }
     // repeated for each devices
 ]
@@ -960,35 +960,35 @@ Full URL: `app.weathercloud.net/page/popular/country/{countryCode}/period/{perio
 Full URL: `app.weathercloud.net/page/followers/country/{countryCode}`
 
 **DATA:** in URL: 
-```json
+```ts
 {
-    "countryCode": "string", // example FR for France
+    countryCode: string, // example FR for France
 }
 ```
 **Response**
-```json
+```ts
 [
     {
-        "type": "device|metar",
-        "code": "weatherCloudId", // station ID
-        "name": "string", // station name
+        type: "device" | "metar",
+        code: string, // station ID
+        name: string, // station name
 
         // position of the station
-        "city": "string",
-        "latitude": "string",
-        "longitude": "string",
-        "elevation": "string", // elevation in decimeters (meters*10)
+        city: string,
+        latitude: string,
+        longitude: string,
+        elevation: string, // elevation in decimeters (meters*10)
 
-        "image": "null | string", // optional url of device banner image
-        "account": "number | string", // not sure what is this
-        "isFavorite": "boolean", // with account cookie tell you if you favorited this station
-        "update": "number", // seconds elapsed since last update
-        "values": {
-            "...": "..."
+        image: null | string, // optional url of device banner image
+        account: number | string, // not sure what is this
+        isFavorite: boolean, // with account cookie tell you if you favorited this station
+        update: number, // seconds elapsed since last update
+        values: {
+        "..."
             // just like /device/values return but as string for some reason
         },
-        "status": "string",
-        "data": "string" // number of views
+        status: string,
+        data: string // number of views
     }
     // repeated for each devices
 ]
@@ -1002,35 +1002,35 @@ Full URL: `app.weathercloud.net/page/followers/country/{countryCode}`
 Full URL: `app.weathercloud.net/page/newest/country/{countryCode}`
 
 **DATA:** in URL: 
-```json
+```ts
 {
-    "countryCode": "string", // example FR for France
+    countryCode: string, // example FR for France
 }
 ```
 **Response**
-```json
+```ts
 [
     {
-        "type": "device|metar",
-        "code": "weatherCloudId", // station ID
-        "name": "string", // station name
+        type: "device" | "metar",
+        code: string, // station ID
+        name: string, // station name
 
         // position of the station
-        "city": "string",
-        "latitude": "string",
-        "longitude": "string",
-        "elevation": "string", // elevation in decimeters (meters*10)
+        city: string,
+        latitude: string,
+        longitude: string,
+        elevation: string, // elevation in decimeters (meters*10)
 
-        "image": "null | string", // optional url of device banner image
-        "account": "number | string", // not sure what is this
-        "isFavorite": "boolean", // with account cookie tell you if you favorited this station
-        "update": "number", // seconds elapsed since last update
-        "values": {
-            "...": "..."
+        image: null | string, // optional url of device banner image
+        account: number | string, // not sure what is this
+        isFavorite: boolean, // with account cookie tell you if you favorited this station
+        update: number, // seconds elapsed since last update
+        values: {
+        "..."
             // just like /device/values return but as string for some reason
         },
-        "status": "string",
-        "data": "string" // number of views
+        status: string,
+        data: string // number of views
     }
     // repeated for each devices
 ]
@@ -1044,37 +1044,37 @@ Full URL: `app.weathercloud.net/page/newest/country/{countryCode}`
 Full URL: `app.weathercloud.net/page/coordinates/latitude/{lat}/longitude/{lon}/distance/{radius}`
 
 **DATA:** in URL: 
-```json
+```ts
 {
-    "lat": "LATITUDE",
-    "lon": "LONGITUDE",
-    "radius": "RADIUS OF SEARCH (KM)"
+    lat: "LATITUDE",
+    lon: "LONGITUDE",
+    radius: "RADIUS OF SEARCH (KM)"
 }
 ```
 **Response**
-```json
+```ts
 [
     {
-        "type": "device|metar",
-        "code": "weatherCloudId", // station ID
-        "name": "string", // station name
+        type: "device" | "metar",
+        code: string, // station ID
+        name: string, // station name
 
         // position of the station
-        "city": "string",
-        "latitude": "string",
-        "longitude": "string",
-        "elevation": "string", // elevation in decimeters (meters*10)
+        city: string,
+        latitude: string,
+        longitude: string,
+        elevation: string, // elevation in decimeters (meters*10)
 
-        "image": "null | string", // optional url of device banner image
-        "account": "number | string", // not sure what is this
-        "isFavorite": "boolean", // with account cookie tell you if you favorited this station
-        "update": "number", // seconds elapsed since last update
-        "values": {
-            "...": "..."
+        image: null | string, // optional url of device banner image
+        account: number | string, // not sure what is this
+        isFavorite: boolean, // with account cookie tell you if you favorited this station
+        update: number, // seconds elapsed since last update
+        values: {
+            "..."
             // just like /device/values return but as string for some reason
         },
-        "status": "string",
-        "data": "string" // number of views
+        status: string,
+        data: string // number of views
     }
     // repeated for each devices
 ]
@@ -1092,34 +1092,34 @@ Full URL: `app.weathercloud.net/page/own`
 **DATA:** none
 
 **Response**
-```json 
+```ts 
 {
-    "favorites": [ // favorite devices list
+    favorites: [ // favorite devices list
         {
-            "type": "device|metar",
-            "code": "weatherCloudId", // station ID
-            "name": "string", // station name
+            type: "device" | "metar",
+            code: string, // station ID
+            name: string, // station name
 
             // position of the station
-            "city": "string",
-            "latitude": "string",
-            "longitude": "string",
-            "elevation": "string", // elevation in decimeters (meters*10)
+            city: string,
+            latitude: string,
+            longitude: string,
+            elevation: string, // elevation in decimeters (meters*10)
 
-            "image": "null | string", // optional url of device banner image
-            "account": "number | string", // not sure what is this
-            "isFavorite": "boolean", // with account cookie tell you if you favorited this station
-            "update": "number", // seconds elapsed since last update
-            "values": {
-                "...": "..."
+            image: null | string, // optional url of device banner image
+            account: number | string, // not sure what is this
+            isFavorite: boolean, // with account cookie tell you if you favorited this station
+            update: number, // seconds elapsed since last update
+            values: {
+                "..."
                 // just like /device/values return but as string for some reason
             },
-            "status": "string",
-            "data": "string" // number of views
+            status: string,
+            data: string // number of views
         }
         // repeated for each devices
     ],
-    "devices": [ // owned devices list
+    devices: [ // owned devices list
         "..."
         // just like favorites
     ]
@@ -1139,11 +1139,11 @@ Here is included as much information as possible of what's know.
 Full URL: `app.weathercloud.net/device/evolution`
 
 **DATA:** Request body: 
-```json 
+```ts 
 {
-    "device":"DEVICE_ID",
-    "variable":"101/201/541/641/701/801/811/1001/1101/6011/6501 (and maybe more)",
-    "period":"day/week/month",
+    device: "DEVICE_ID",
+    variable: "101/201/541/641/701/801/811/1001/1101/6011/6501 (and maybe more)",
+    period: "day/week/month",
 }
 ```
 
