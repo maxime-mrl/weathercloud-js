@@ -165,555 +165,159 @@ code: "DEVICE_ID",
         number, // time of measure (unizx seconds)
         number, // value measured (refer to "device/stats" to see unit etc.)
     ],
-    temp_day_max: [
-        number, // will not repeat for each one, you get the idea
-        number
-    ],
-    temp_day_min: [
-        number, 
-        number
-    ],
-    temp_month_max: [
-        number, 
-        number
-    ],
-    temp_month_min: [
-        number, 
-        number
-    ],
-    temp_year_max: [
-        number, 
-        number
-    ],
-    temp_year_min: [
-        number, 
-        number
-    ],
+    temp_day_max: [ number, number ], // will not repeat for each one, you get the idea
+    temp_day_min: [ number, number ],
+    temp_month_max: [ number, number ],
+    temp_month_min: [ number, number ],
+    temp_year_max: [ number, number ],
+    temp_year_min: [ number, number ],
 
-    dew_current: [
-        number, 
-        number
-    ],
-    dew_day_max: [
-        number, 
-        number
-    ],
-    dew_day_min: [
-        number, 
-        number
-    ],
-    dew_month_max: [
-        number, 
-        number
-    ],
-    dew_month_min: [
-        number, 
-        number
-    ],
-    dew_year_max: [
-        number, 
-        number
-    ],
-    dew_year_min: [
-        number, 
-        number
-    ],
+    dew_current: [ number, number ],
+    dew_day_max: [ number, number ],
+    dew_day_min: [ number, number ],
+    dew_month_max: [ number, number ],
+    dew_month_min: [ number, number ],
+    dew_year_max: [ number, number ],
+    dew_year_min: [ number, number ],
     
-    hum_current: [
-        number, 
-        number
-    ],
-    hum_day_max: [
-        number, 
-        number
-    ],
-    hum_day_min: [
-        number, 
-        number
-    ],
-    hum_month_max: [
-        number, 
-        number
-    ],
-    hum_month_min: [
-        number, 
-        number
-    ],
-    hum_year_max: [
-        number, 
-        number
-    ],
-    hum_year_min: [
-        number, 
-        number
-    ],
+    hum_current: [ number, number ],
+    hum_day_max: [ number, number ],
+    hum_day_min: [ number, number ],
+    hum_month_max: [ number, number ],
+    hum_month_min: [ number, number ],
+    hum_year_max: [ number, number ],
+    hum_year_min: [ number, number ],
     
-    bar_current: [
-        number, 
-        number
-    ],
-    bar_day_max: [
-        number, 
-        number
-    ],
-    bar_day_min: [
-        number, 
-        number
-    ],
-    bar_month_max: [
-        number, 
-        number
-    ],
-    bar_month_min: [
-        number, 
-        number
-    ],
-    bar_year_max: [
-        number, 
-        number
-    ],
-    bar_year_min: [
-        number, 
-        number
-    ],
+    bar_current: [ number, number ],
+    bar_day_max: [ number, number ],
+    bar_day_min: [ number, number ],
+    bar_month_max: [ number, number ],
+    bar_month_min: [ number, number ],
+    bar_year_max: [ number, number ],
+    bar_year_min: [ number, number ],
     
-    wspdavg_current: [
-        number, 
-        number
-    ],
-    wspdavg_day_max: [
-        number, 
-        number
-    ],
-    wspdavg_day_min: [
-        number, 
-        number
-    ],
-    wspdavg_month_max: [
-        number, 
-        number
-    ],
-    wspdavg_month_min: [
-        number, 
-        number
-    ],
-    wspdavg_year_max: [
-        number, 
-        number
-    ],
-    wspdavg_year_min: [
-        number, 
-        number
-    ],
+    wspdavg_current: [ number, number ],
+    wspdavg_day_max: [ number, number ],
+    wspdavg_day_min: [ number, number ],
+    wspdavg_month_max: [ number, number ],
+    wspdavg_month_min: [ number, number ],
+    wspdavg_year_max: [ number, number ],
+    wspdavg_year_min: [ number, number ],
     
-    wspdhi_current: [
-        number, 
-        number
-    ],
-    wspdhi_day_max: [
-        number, 
-        number
-    ],
-    wspdhi_day_min: [
-        number, 
-        number
-    ],
-    wspdhi_month_max: [
-        number, 
-        number
-    ],
-    wspdhi_month_min: [
-        number, 
-        number
-    ],
-    wspdhi_year_max: [
-        number, 
-        number
-    ],
-    wspdhi_year_min: [
-        number, 
-        number
-    ],
+    wspdhi_current: [ number, number ],
+    wspdhi_day_max: [ number, number ],
+    wspdhi_day_min: [ number, number ],
+    wspdhi_month_max: [ number, number ],
+    wspdhi_month_min: [ number, number ],
+    wspdhi_year_max: [ number, number ],
+    wspdhi_year_min: [ number, number ],
     
-    wdiravg_current: [
-        number, 
-        number
-    ],
-    wdiravg_day_max: [
-        number, 
-        number
-    ],
-    wdiravg_day_min: [
-        number, 
-        number
-    ],
-    wdiravg_month_max: [
-        number, 
-        number
-    ],
-    wdiravg_month_min: [
-        number, 
-        number
-    ],
-    wdiravg_year_max: [
-        number, 
-        number
-    ],
-    wdiravg_year_min: [
-        number, 
-        number
-    ],
+    wdiravg_current: [ number, number ],
+    wdiravg_day_max: [ number, number ],
+    wdiravg_day_min: [ number, number ],
+    wdiravg_month_max: [ number, number ],
+    wdiravg_month_min: [ number, number ],
+    wdiravg_year_max: [ number, number ],
+    wdiravg_year_min: [ number, number ],
 
-    rain_current: [
-        number, 
-        number
-    ],
-    rain_day_max: [
-        number, 
-        number
-    ],
-    rain_day_total: [
-        number, 
-        number
-    ],
-    rain_month_max: [
-        number, 
-        number
-    ],
-    rain_month_total: [
-        number, 
-        number
-    ],
-    rain_year_max: [
-        number, 
-        number
-    ],
-    rain_year_total: [
-        number, 
-        number
-    ],
+    rain_current: [ number, number ],
+    rain_day_max: [ number, number ],
+    rain_day_total: [ number, number ],
+    rain_month_max: [ number, number ],
+    rain_month_total: [ number, number ],
+    rain_year_max: [ number, number ],
+    rain_year_total: [ number, number ],
     
     // optional
-    wspd_current: [
-        number, 
-        number
-    ],
-    wspd_day_max: [
-        number, 
-        number
-    ],
-    wspd_day_min: [
-        number, 
-        number
-    ],
-    wspd_month_max: [
-        number, 
-        number
-    ],
-    wspd_month_min: [
-        number, 
-        number
-    ],
-    wspd_year_max: [
-        number, 
-        number
-    ],
-    wspd_year_min: [
-        number, 
-        number
-    ],
+    wspd_current: [ number, number ],
+    wspd_day_max: [ number, number ],
+    wspd_day_min: [ number, number ],
+    wspd_month_max: [ number, number ],
+    wspd_month_min: [ number, number ],
+    wspd_year_max: [ number, number ],
+    wspd_year_min: [ number, number ],
     
-    rainrate_current: [
-        number, 
-        number
-    ],
-    rainrate_day_max: [
-        number, 
-        number
-    ],
-    rainrate_day_min: [
-        number, 
-        number
-    ],
-    rainrate_month_max: [
-        number, 
-        number
-    ],
-    rainrate_month_min: [
-        number, 
-        number
-    ],
-    rainrate_year_max: [
-        number, 
-        number
-    ],
-    rainrate_year_min: [
-        number, 
-        number
-    ],
+    rainrate_current: [ number, number ],
+    rainrate_day_max: [ number, number ],
+    rainrate_day_min: [ number, number ],
+    rainrate_month_max: [ number, number ],
+    rainrate_month_min: [ number, number ],
+    rainrate_year_max: [ number, number ],
+    rainrate_year_min: [ number, number ],
 
-    solarrad_current: [
-        number, 
-        number
-    ],
-    solarrad_day_max: [
-        number, 
-        number
-    ],
-    solarrad_day_hours: [
-        number, 
-        number
-    ],
-    solarrad_month_max: [
-        number, 
-        number
-    ],
-    solarrad_month_hours: [
-        number, 
-        number
-    ],
-    solarrad_year_max: [
-        number, 
-        number
-    ],
-    solarrad_year_hours: [
-        number, 
-        number
-    ],
+    solarrad_current: [ number, number ],
+    solarrad_day_max: [ number, number ],
+    solarrad_day_hours: [ number, number ],
+    solarrad_month_max: [ number, number ],
+    solarrad_month_hours: [ number, number ],
+    solarrad_year_max: [ number, number ],
+    solarrad_year_hours: [ number, number ],
     
-    uvi_current: [
-        number, 
-        number
-    ],
-    uvi_day_max: [
-        number, 
-        number
-    ],
-    uvi_day_min: [
-        number, 
-        number
-    ],
-    uvi_month_max: [
-        number, 
-        number
-    ],
-    uvi_month_min: [
-        number, 
-        number
-    ],
-    uvi_year_max: [
-        number, 
-        number
-    ],
-    uvi_year_min: [
-        number, 
-        number
-    ],
+    uvi_current: [ number, number ],
+    uvi_day_max: [ number, number ],
+    uvi_day_min: [ number, number ],
+    uvi_month_max: [ number, number ],
+    uvi_month_min: [ number, number ],
+    uvi_year_max: [ number, number ],
+    uvi_year_min: [ number, number ],
     
-    chill_current: [
-        number, 
-        number
-    ],
-    chill_day_max: [
-        number, 
-        number
-    ],
-    chill_day_min: [
-        number, 
-        number
-    ],
-    chill_month_max: [
-        number, 
-        number
-    ],
-    chill_month_min: [
-        number, 
-        number
-    ],
-    chill_year_max: [
-        number, 
-        number
-    ],
-    chill_year_min: [
-        number, 
-        number
-    ],
+    chill_current: [ number, number ],
+    chill_day_max: [ number, number ],
+    chill_day_min: [ number, number ],
+    chill_month_max: [ number, number ],
+    chill_month_min: [ number, number ],
+    chill_year_max: [ number, number ],
+    chill_year_min: [ number, number ],
     
-    heat_current: [
-        number, 
-        number
-    ],
-    heat_day_max: [
-        number, 
-        number
-    ],
-    heat_day_min: [
-        number, 
-        number
-    ],
-    heat_month_max: [
-        number, 
-        number
-    ],
-    heat_month_min: [
-        number, 
-        number
-    ],
-    heat_year_max: [
-        number, 
-        number
-    ],
-    heat_year_min: [
-        number, 
-        number
-    ],
+    heat_current: [ number, number ],
+    heat_day_max: [ number, number ],
+    heat_day_min: [ number, number ],
+    heat_month_max: [ number, number ],
+    heat_month_min: [ number, number ],
+    heat_year_max: [ number, number ],
+    heat_year_min: [ number, number ],
     
     // visibility (for some reason divided by 100)
-    vis_current: [
-        number, 
-        number
-    ],
-    vis_day_max: [
-        number, 
-        number
-    ],
-    vis_day_min: [
-        number, 
-        number
-    ],
-    vis_month_max: [
-        number, 
-        number
-    ],
-    vis_month_min: [
-        number, 
-        number
-    ],
-    vis_year_max: [
-        number, 
-        number
-    ],
-    vis_year_min: [
-        number, 
-        number
-    ],
+    vis_current: [ number, number ],
+    vis_day_max: [ number, number ],
+    vis_day_min: [ number, number ],
+    vis_month_max: [ number, number ],
+    vis_month_min: [ number, number ],
+    vis_year_max: [ number, number ],
+    vis_year_min: [ number, number ],
 
     // logged only
-    tempin_current: [
-        number, 
-        number
-    ],
-    tempin_day_max: [
-        number, 
-        number
-    ],
-    tempin_day_min: [
-        number, 
-        number
-    ],
-    tempin_month_max: [
-        number, 
-        number
-    ],
-    tempin_month_min: [
-        number, 
-        number
-    ],
-    tempin_year_max: [
-        number, 
-        number
-    ],
-    tempin_year_min: [
-        number, 
-        number
-    ],
+    tempin_current: [ number, number ],
+    tempin_day_max: [ number, number ],
+    tempin_day_min: [ number, number ],
+    tempin_month_max: [ number, number ],
+    tempin_month_min: [ number, number ],
+    tempin_year_max: [ number, number ],
+    tempin_year_min: [ number, number ],
     
-    humin_current: [
-        number, 
-        number
-    ],
-    humin_day_max: [
-        number, 
-        number
-    ],
-    humin_day_min: [
-        number, 
-        number
-    ],
-    humin_month_max: [
-        number, 
-        number
-    ],
-    humin_month_min: [
-        number, 
-        number
-    ],
-    humin_year_max: [
-        number, 
-        number
-    ],
-    humin_year_min: [
-        number, 
-        number
-    ],
+    humin_current: [ number, number ],
+    humin_day_max: [ number, number ],
+    humin_day_min: [ number, number ],
+    humin_month_max: [ number, number ],
+    humin_month_min: [ number, number ],
+    humin_year_max: [ number, number ],
+    humin_year_min: [ number, number ],
 
-    dewin_current: [
-        number, 
-        number
-    ],
-    dewin_day_max: [
-        number, 
-        number
-    ],
-    dewin_day_min: [
-        number, 
-        number
-    ],
-    dewin_month_max: [
-        number, 
-        number
-    ],
-    dewin_month_min: [
-        number, 
-        number
-    ],
-    dewin_year_max: [
-        number, 
-        number
-    ],
-    dewin_year_min: [
-        number, 
-        number
-    ],
+    dewin_current: [ number, number ],
+    dewin_day_max: [ number, number ],
+    dewin_day_min: [ number, number ],
+    dewin_month_max: [ number, number ],
+    dewin_month_min: [ number, number ],
+    dewin_year_max: [ number, number ],
+    dewin_year_min: [ number, number ],
     
-    heatin_current: [
-        number, 
-        number
-    ],
-    heatin_day_max: [
-        number, 
-        number
-    ],
-    heatin_day_min: [
-        number, 
-        number
-    ],
-    heatin_month_max: [
-        number, 
-        number
-    ],
-    heatin_month_min: [
-        number, 
-        number
-    ],
-    heatin_year_max: [
-        number, 
-        number
-    ],
-    heatin_year_min: [
-        number, 
-        number
-    ]
+    heatin_current: [ number, number ],
+    heatin_day_max: [ number, number ],
+    heatin_day_min: [ number, number ],
+    heatin_month_max: [ number, number ],
+    heatin_month_min: [ number, number ],
+    heatin_year_max: [ number, number ],
+    heatin_year_min: [ number, number  ]
 }
 ```
 
