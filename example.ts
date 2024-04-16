@@ -19,8 +19,8 @@ import { login, getStationStatus, getNearest, getTop, getOwn, getWind, fetchWeat
         // console.log(await getStationStatus("4172447340")); // get uptime statistics
         // console.log((await getOwn()).favorites); // get all owned stations
         console.log(await isFavorite("8402540083"));
-        console.log(await addFavorite("8402540083"));
-        console.log(await isFavorite("8402540083"));
+        // console.log(await addFavorite("8402540083"));
+        // console.log(await isFavorite("8402540083"));
     }
 
     // /* ---------------------------- GET TOP STATIONS ---------------------------- */
