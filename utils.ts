@@ -24,7 +24,7 @@ const session = {
 	}
 };
 
-export function checkId(id:weatherCloudId) {
+export function checkId(id:weatherCloudId) { // check ID validity and return if is metar or device type
 	const deviceRegex = /^[0-9]{10}$/;
 	const metarRegex = /^[A-Z]{4}$/;
 	if (!id || (!deviceRegex.test(id) && !metarRegex.test(id))) return false; // check that id is valid
@@ -85,8 +85,7 @@ export function parseDevicesList(devices:Device[], dataName?:string) { // correc
 		const numberValues = Object.fromEntries( // parse values to int and divide them so it's just like normal WeatherData because weathercloud is terribly inconsistent
 			Object.entries(values).map(([key, value]) => {
 				if (typeof value === "string") {
-					if (/epoch|hum|wdir/.test(key)) return [key, +value]
-					return [key, (+value)/10] // devide by ten the value so it's the right decimal
+					return (/epoch|hum|wdir/.test(key)) ? [key, +value] : [key, (+value)/10] // devide by ten the value so it's the right decimal
 				};
 				return [key, value];
 			})
@@ -105,31 +104,25 @@ export function parseDevicesList(devices:Device[], dataName?:string) { // correc
 
 export const chillFn = (temp:number, wspd:number) => { // mostly untouched from weathercloud
 	if (wspd < 1.3 || temp > 21) return temp;
-	
+
 	let windPow = Math.pow(wspd*3.6, 0.16);
-	let _chill = 13.12 + 0.6215 * temp-11.37 * windPow + 0.3965 * temp * windPow;
+	let _chill = 13.12 + 0.6215 * temp - 11.37 * windPow + 0.3965 * temp * windPow;
 	
 	return Math.min(temp, _chill);
 }
 
 export const heatFn = (temp:number, hum:number) => { // mostly untouched from weathercloud
-	if(temp <= 4.44) return temp;
+	if (temp <= 4.44) return temp;
 
 	// 1. Steadman ( Celsius ) This formula include the average with the temperature
-	let heat = -3.94 + 1.1*temp + 0.026*hum;
+	let heat = -3.94 + 1.1 * temp + 0.026 * hum;
 
 	// 2. HI > 80ºF (26.7ºC) -> The regression equation of Rothfusz ( Celsius )
-	if (heat > 26.5){
-		heat = -8.784694755 + 1.61139411*temp + 2.338548838*hum - 0.1461160501*hum*temp - 0.012308094*temp*temp - 0.01642482777*hum*hum 
-		+ 0.002211732*hum*temp*temp + 0.00072546*hum*hum*temp - 0.000003582*hum*hum*temp*temp;
-	}
+	if (heat > 26.5) heat = -8.784694755 + 1.61139411 * temp + 2.338548838 * hum - 0.1461160501 * hum * temp - 0.012308094 * temp * temp - 0.01642482777 * hum * hum + 0.002211732 * hum * temp * temp + 0.00072546 * hum * hum * temp - 0.000003582 * hum * hum * temp * temp;
 
 	// 3. Adjustments. 
-	if (hum < 13 && temp > 26.5 && temp < 44.5) {
-		heat -= ((13-hum)/4) * (Math.sqrt(1-0.059*Math.abs(1.8*temp-63)));
-	} else if (hum > 85 && temp > 26.5 && temp < 30.5) {
-		heat += ((hum-85)/10) * (11-0.36*temp);
-	}
+	if (hum < 13 && temp > 26.5 && temp < 44.5) heat -= ((13-hum)/4) * (Math.sqrt(1-0.059*Math.abs(1.8*temp-63)));
+	else if (hum > 85 && temp > 26.5 && temp < 30.5) heat += ((hum-85)/10) * (11-0.36*temp);
 
 	return Math.max(temp, heat);
 }

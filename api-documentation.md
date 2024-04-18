@@ -63,7 +63,7 @@ For metars it's the OACI code (four letters) (eg. `LSGG` for geneva).
 
 **Rate limiting**
 
-WeatherCloud seems to rate limit requests (which is understandable). you should not make to many request for nothing **this can be considered as DOS**. free station update every 10 minutes and paid each minutes. You should avoid making more request.
+WeatherCloud seems to rate limit requests (which is understandable). you should not make to many request for nothing. free station updates every 10 minutes and paid ones each minutes. You should avoid making more request than that.
 
 ## Defined endpoints
 
@@ -105,7 +105,7 @@ Full URL: `app.weathercloud.net/device/values?code={id}`
 
 **DATA:** in URL - urlEncoded: 
 ```ts
-code: "DEVICE_ID"
+code: "DEVICE_ID" // Device or METAR
 ```
 
 **Response**
@@ -154,7 +154,7 @@ Full URL: `app.weathercloud.net/device/stats`
 
 **DATA:** Request body: 
 ```ts 
-code: "DEVICE_ID",
+code: "DEVICE_ID", // Device or METAR
 ```
 
 **Response**
@@ -330,7 +330,7 @@ Full URL: `app.weathercloud.net/device/wind?code={id}`
 
 **DATA:** in URL - urlEncoded: 
 ```ts
-code: "DEVICE_ID"
+code: "DEVICE_ID" // Device or METAR
 ```
 
 **Response**
@@ -358,7 +358,7 @@ Full URL: `app.weathercloud.net/device/info/{id}`
 
 **DATA:** in URL 
 ```ts
-"DEVICE_ID"
+"DEVICE_ID" // Device or METAR
 ```
 
 **Response**
@@ -400,7 +400,7 @@ Full URL: `app.weathercloud.net/device/ajaxprofile`
 
 **DATA:** Request body: 
 ```ts 
-d: "DEVICE_ID"
+d: "DEVICE_ID" // Device or METAR
 ```
 
 **Response**
@@ -434,7 +434,7 @@ Full URL: `app.weathercloud.net/device/ajaxdevicestats`
 
 **DATA:** Request body: 
 ```ts 
-device: "DEVICE_ID"
+device: "DEVICE_ID" // /!\ METAR not supported
 ```
 
 **Response**
@@ -457,7 +457,7 @@ Full URL: `app.weathercloud.net/device/ajaxupdatedate`
 
 **DATA:** Request body: 
 ```ts 
-d: "DEVICE_ID"
+d: "DEVICE_ID" // Device or METAR
 ```
 **Response**
 ```ts
@@ -480,7 +480,7 @@ Full URL: `app.weathercloud.net/device/ajaxfavorite`
 **DATA:** Request body: 
 ```ts 
 {
-    device: "DEVICE_ID",
+    device: "DEVICE_ID", // Device or METAR
     delete:  0 | 1 
 }
 ```
@@ -505,7 +505,7 @@ Full URL: `app.weathercloud.net/device/ajaxfavoritesnumber`
 
 **DATA:** Request body: 
 ```ts 
-d: "DEVICE_ID"
+d: "DEVICE_ID" // Device or METAR
 ```
 
 **Response**

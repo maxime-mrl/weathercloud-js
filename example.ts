@@ -1,4 +1,4 @@
-import { login, getStationStatus, getNearest, getTop, getOwn, getWind, fetchWeather, getStatistics, getInfos, isFavorite, addFavorite, removeFavorite } from ".";
+import { login, getStationStatus, getNearest, getTop, getOwn, getWind, fetchWeather, getStatistics, getInfos, isFavorite, addFavorite, removeFavorite, getProfile, getLastUpdate } from ".";
 
 // TEST IDS
 // 4172447340 average station
@@ -9,19 +9,23 @@ import { login, getStationStatus, getNearest, getTop, getOwn, getWind, fetchWeat
 // all examples made here, uncomment the part that interest you
 (async () => {
     // /* -------------------------- FETCH GENERAL WEATHER ------------------------- */
-    // const weather = await fetchWeather("8454216836");
+    // const weather = await fetchWeather("LSGG");
     // console.log(weather);
+    // const profile = await getProfile("LSGG");
+    // console.log(profile)
+    // const update = await getLastUpdate("LSGG");
+    // console.log(update)
 
     // /* ------------------------- LOGIN AND LOGGED ROUTES ------------------------ */
-    const loggingstatus = await login("wadomag381@shaflyn.com", "azerty", true); // testing account made with garbage mail
-    console.log(loggingstatus); // log loggin status
-    if (loggingstatus) { // check loggin to continue
-        // console.log(await getStationStatus("4172447340")); // get uptime statistics
-        // console.log((await getOwn()).favorites); // get all owned stations
-        console.log(await isFavorite("8402540083"));
-        // console.log(await addFavorite("8402540083"));
-        // console.log(await isFavorite("8402540083"));
-    }
+    // const loggingstatus = await login("wadomag381@shaflyn.com", "azerty", true); // testing account made with garbage mail
+    // console.log(loggingstatus); // log loggin status
+    // if (loggingstatus) { // check loggin to continue
+    //     // console.log(await getStationStatus("4172447340")); // get uptime statistics
+    //     // console.log((await getOwn()).favorites); // get all owned stations
+    //     // console.log(await isFavorite("8402540083"));
+    //     // console.log(await addFavorite("8402540083"));
+    //     // console.log(await isFavorite("8402540083"));
+    // }
 
     // /* ---------------------------- GET TOP STATIONS ---------------------------- */
     // const stations = await getTop("popular", "FR", "day"); // get popular station today in france
@@ -43,6 +47,6 @@ import { login, getStationStatus, getNearest, getTop, getOwn, getWind, fetchWeat
     // console.log(stats);
 
     /* -------------------------------- GET INFOS ------------------------------- */
-    // const infos = await getInfos("LSGG");
-    // console.log(infos);
+    const infos = await getInfos("LSGG");
+    console.log(infos);
 })();

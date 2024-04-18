@@ -56,9 +56,8 @@ export interface WeatherData {
 
 export interface LastUpdate {
     update: number // time elapsed since the last update (seconds)
-    status: string // "2" is normal "0" is a special state where update is the only thig worth displaying others means some kind of errors
     server_time: number // server time when requested (unix seconds)
-    time?: string // added later via logic
+    status: string // "2" is normal "0" is a special state where update is the only thig worth displaying others means some kind of errors
 };
 
 export interface Profile {

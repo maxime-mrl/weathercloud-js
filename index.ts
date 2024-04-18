@@ -6,85 +6,70 @@ export async function fetchWeather(id:weatherCloudId) { // fetch general weather
         let type = checkId(id);
         if (!type) throw new Error("Invalid ID");
 
-        const fullReport = {
-            weather: {},
-            update: {},
-            profile: {},
-        };
-
-        /* --------------------------- request basic data --------------------------- */
         const data = await fetchData(`https://app.weathercloud.net/${type}/values?code=${id}`);
-        const lastUpdate = await fetchData(`https://app.weathercloud.net/${type}/ajaxupdatedate`, `d=${id}`);
-        const profile = await fetchData(`https://app.weathercloud.net/${type}/ajaxprofile`, `d=${id}`);
-
-        /* --------------------------- check data presence -------------------------- */
-        if (!data || !("epoch" in data) ||
-            !("update" in lastUpdate) ||
-            !("followers" in profile)
-        ) throw new Error("Failed to fetch");
-
+        if (!("epoch" in data)) throw new Error("Failed to fetch");
+        // fix visibility if present
+        if (typeof data.vis === "number") data.vis = data.vis*100;
 
         /* ------------------------------ parse weather ----------------------------- */
         // calculate clouds height
         const cloudsHeight = (data.temp && data.dew && data.temp > -40 && data.dew > -40) ? Math.max(0, 124.69*(data.temp - data.dew)) : null;
-
-        let weatherAvg: string|null = null
+        let weatherAvg: string|null = null;
         // check data presence
-        if (data.bar && data.rainrate && data.hum) {
+        if (data.bar && typeof data.rainrate === "number" && typeof data.hum === "number") {
             // check data validity
-            if (data.bar < 0 ||
-                data.rainrate < 0 ||
-                !cloudsHeight ||
-                data.hum < 0 ||
-                data.hum > 100
-            ) throw new Error("Invalid data");
+            if (data.bar < 0 || data.rainrate < 0 || !cloudsHeight || data.hum < 0 || data.hum > 100) throw new Error("Invalid data");
             // guess current conditions based on data
             weatherAvg = "clear";
             if (data.rainrate == 0) {
-                const barTH = [1005,1010,1015];
-                const fogTH = 150;
-                if (data.bar < barTH[0]) weatherAvg = "cloud";
-                else if (data.bar < barTH[1]) weatherAvg = "change";
-                else if (data.bar < barTH[2]) weatherAvg = "few";
+                if (data.bar < 1005) weatherAvg = "cloud";
+                else if (data.bar < 1010) weatherAvg = "change";
+                else if (data.bar < 1015) weatherAvg = "few";
                 
-                if (cloudsHeight < fogTH) weatherAvg += "-fog";
+                if (cloudsHeight < 150) weatherAvg += "-fog";
             } else {
-                const rainrateTH = [2,15];
-                if (data.rainrate < rainrateTH[0]) weatherAvg = "light";
-                else if (data.rainrate < rainrateTH[1]) weatherAvg = "moderate";
+                if (data.rainrate < 2) weatherAvg = "light";
+                else if (data.rainrate < 15) weatherAvg = "moderate";
                 else weatherAvg = "heavy";
             }
         }
-
-        // get feel (more or less just like heat/chill but since this is optionnal we get the value no matter what)
+        // get feel (more or less just like heat / chill but since this is optionnal we get the value no matter what)
         let feel = data.temp;
         if (data.temp && data.wspd && data.temp < 10) feel = chillFn(data.temp, data.wspd);
         else if (data.temp && data.hum && data.temp > 26) feel = heatFn(data.temp, data.hum);
 
-        // parse visibility if present cause for some reason it's divided by 100
-        if (typeof data.vis === "number") data.vis = data.vis*100;
-        // save the added data
-        const { epoch, ...dataToSave } = data;
-        fullReport.weather = {
-            ...dataToSave,
-            ...(cloudsHeight ? { cloudsHeight } : {}), // not include null data
-            ...(weatherAvg ? { weatherAvg } : {}),
-            ...(feel ? { feel } : {}),
-        };
+        return {
+            ...data,
+            computed: {
+                cloudsHeight,
+                feel,
+                weatherAvg
+            }
+        }
+    } catch (err) {
+        return { error: err }
+    }
+}
 
-        /* ---------------------------- parse update time --------------------------- */
-	    const time = new Date(epoch*1000);
-        fullReport.update = {
-            ...lastUpdate,
-            time: `${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`,
-            lastUpdateMinutes: Math.round(lastUpdate.update/60),
-            updateTime: epoch
-        };
+export async function getProfile(id:weatherCloudId) {
+    try {
+        let type = checkId(id);
+        if (!type) throw new Error("Invalid ID");
+        const profile = await fetchData(`https://app.weathercloud.net/${type}/ajaxprofile`, `d=${id}`);
+        if (!("followers" in profile)) throw new Error("Failed to fetch");
+        return profile;
+    } catch (err) {
+        return { error: err }
+    }
+}
 
-        /* ------------------------------ parse profile ----------------------------- */
-        fullReport.profile = profile; // nothing to add
-
-        return fullReport;
+export async function getLastUpdate(id:weatherCloudId) {
+    try {
+        let type = checkId(id);
+        if (!type) throw new Error("Invalid ID");
+        const lastUpdate = await fetchData(`https://app.weathercloud.net/${type}/ajaxupdatedate`, `d=${id}`);
+        if (!("update" in lastUpdate)) throw new Error("Failed to fetch");
+        return lastUpdate;
     } catch (err) {
         return { error: err }
     }
@@ -96,7 +81,7 @@ export async function getStationStatus(id:regularID) { // fetch the station stat
         if (!type || type === "metar") throw new Error("Invalid ID");
         if ((await getCookie()).length < 1) throw new Error("Session required!");
         const data = await fetchData(`https://app.weathercloud.net/device/ajaxdevicestats`, `device=${id}`);
-        if (!data || !Array.isArray(data) || !("date" in data[0]))  throw new Error("Failed to fetch");
+        if (!Array.isArray(data) || !("date" in data[0])) throw new Error("Failed to fetch");
         return data;
     } catch (err) {
         return { error: err };
@@ -108,7 +93,7 @@ export async function getStatistics(id:weatherCloudId) {
         let type = checkId(id);
         if (!type) throw new Error("Invalid ID");
         const data = await fetchData(`https://app.weathercloud.net/${type}/stats?code=${id}`);
-        if (!data || !("last_update" in data))  throw new Error("Failed to fetch");
+        if (!("last_update" in data)) throw new Error("Failed to fetch");
         return data;
     } catch (err) {
         return { error: err };
@@ -118,25 +103,25 @@ export async function getStatistics(id:weatherCloudId) {
 export async function getNearest(lat: string|number, lon: string|number, radius: string|number) {
     try {
         const data = await fetchData(`https://app.weathercloud.net/page/coordinates/latitude/${lat}/longitude/${lon}/distance/${radius}`);
-        if (!data || !("devices" in data) || !Array.isArray(data.devices))  throw new Error("Failed to fetch");
+        if (!data || !("devices" in data) || !Array.isArray(data.devices)) throw new Error("Failed to fetch");
         return parseDevicesList(data.devices, "distance");
     } catch (err) {
         return [ { error: err } ];
     }
 }
 
-export async function getTop(definer:"newest"|"followers"|"popular",countryCode:countryCode, period?:periodStr) {
+export async function getTop(stat:"newest"|"followers"|"popular", countryCode:countryCode, period?:periodStr) {
     try {
-        let url = `https://app.weathercloud.net/page/${definer}/country/${countryCode}`;
-        if (definer === "popular") {
+        let url = `https://app.weathercloud.net/page/${stat}/country/${countryCode}`;
+        if (stat === "popular") {
             if (!period) throw new Error("Period required for popular ranking");
             url += `/period/${period}`;
         }
         const data = await fetchData(url);
-        if (!data || !("devices" in data) || !Array.isArray(data.devices))  throw new Error("Failed to fetch");
-        let dataType:string = definer;
-        if (definer === "newest") dataType = "age";
-        if (definer === "popular") dataType = "views";
+        if (!("devices" in data) || !Array.isArray(data.devices))  throw new Error("Failed to fetch");
+        let dataType:string = stat;
+        if (stat === "newest") dataType = "age";
+        if (stat === "popular") dataType = "views";
         return parseDevicesList(data.devices, dataType);
     } catch (err) {
         return { error: err };
@@ -147,7 +132,7 @@ export async function getOwn() {
     try {
         if ((await getCookie()).length < 1) throw new Error("Session required!");
         const data = await fetchData(`https://app.weathercloud.net/page/own`);
-        if (!data || !("devices" in data) || !("favorites" in data))  throw new Error("Failed to fetch");
+        if (!("devices" in data) || !("favorites" in data))  throw new Error("Failed to fetch");
         return {
             devices: parseDevicesList(data.devices),
             favorites: parseDevicesList(data.favorites),
@@ -186,7 +171,7 @@ export async function getWind(id:weatherCloudId) {
         let type = checkId(id);
         if (!type) throw new Error("Invalid ID");
         const data = await fetchData(`https://app.weathercloud.net/${type}/wind?code=${id}`);
-        if (!data || !("date" in data))  throw new Error("Failed to fetch");
+        if (!("date" in data))  throw new Error("Failed to fetch");
 
         // calculation from weatherclouds to display graphs
         let wdirdistData: number[] = [];
@@ -206,7 +191,7 @@ export async function getWind(id:weatherCloudId) {
         let wdirproportions = wdirdistData.map(wdir => (wdir / total) * 100);
 
         return {
-            date: data.date, // tile of the update
+            date: data.date, // time of the update
             // for graph of percentage per cardinals
             wdirproportions, // array of proportion of wind, each one is a cardinals
             calm: (calm/total) * 100, // proportion of calm wind time
@@ -223,8 +208,14 @@ export async function getInfos(id:weatherCloudId) {
     try {
         if (!checkId(id)) throw new Error("Invalid ID");
         const data = await fetchData(`https://app.weathercloud.net/device/info/${id}`);
-        if (!data)  throw new Error("Failed to fetch");
-        return data;
+        if (!("device" in data) || !("values" in data))  throw new Error("Failed to fetch");
+        const values = Object.fromEntries( // parse values to int because weathercloud is terribly inconsistent
+			Object.entries(data.values).map(([key, value]) => ([key, +value]))
+		);
+        return {
+            ...data,
+            values
+        };
     } catch (err) {
         return { error: err };
     }
