@@ -4,12 +4,13 @@ import { login, getStationStatus, getNearest, getTop, getOwn, getWind, fetchWeat
 // 4172447340 average station
 // 8454216836 station that have almost no data
 // 4633478916 station that have alot of data
+// 299935953 9-digit id and webcam
 // LSGG METAR station
 
 // all examples made here, uncomment the part that interest you
 (async () => {
     // /* -------------------------- FETCH GENERAL WEATHER ------------------------- */
-    // const weather = await fetchWeather("LSGG");
+    // const weather = await fetchWeather("4633478916");
     // console.log(weather);
     // const profile = await getProfile("LSGG");
     // console.log(profile)
@@ -30,7 +31,7 @@ import { login, getStationStatus, getNearest, getTop, getOwn, getWind, fetchWeat
     // /* ---------------------------- GET TOP STATIONS ---------------------------- */
     // const stations = await getTop("popular", "FR", "day"); // get popular station today in france
     // if (Array.isArray(stations)) { // check if found and log
-    //     console.log(stations[0]);
+    //     console.log(stations);
     //     console.log(stations.length);
     // }
 
@@ -47,6 +48,6 @@ import { login, getStationStatus, getNearest, getTop, getOwn, getWind, fetchWeat
     // console.log(stats);
 
     /* -------------------------------- GET INFOS ------------------------------- */
-    const infos = await getInfos("LSGG");
-    console.log(infos);
+    // const infos = await getInfos("299935953");
+    // console.log(infos);
 })();

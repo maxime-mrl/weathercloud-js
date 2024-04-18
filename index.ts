@@ -1,5 +1,6 @@
-import type { weatherCloudId, countryCode, periodStr, regularID } from "./types/weatherCloud";
+import type { weatherCloudId, countryCode, periodStr, regularID, deviceMapElement, Device } from "./types/weatherCloud";
 import { chillFn, heatFn, fetchData, setCookies, parseDevicesList, getCookie, checkId } from "./utils";
+import fs from "fs"
 
 export async function fetchWeather(id:weatherCloudId) { // fetch general weather data
     try {
@@ -104,7 +105,7 @@ export async function getNearest(lat: string|number, lon: string|number, radius:
     try {
         const data = await fetchData(`https://app.weathercloud.net/page/coordinates/latitude/${lat}/longitude/${lon}/distance/${radius}`);
         if (!data || !("devices" in data) || !Array.isArray(data.devices)) throw new Error("Failed to fetch");
-        return parseDevicesList(data.devices, "distance");
+        return parseDevicesList(data.devices as Device[], "distance");
     } catch (err) {
         return [ { error: err } ];
     }
@@ -122,7 +123,7 @@ export async function getTop(stat:"newest"|"followers"|"popular", countryCode:co
         let dataType:string = stat;
         if (stat === "newest") dataType = "age";
         if (stat === "popular") dataType = "views";
-        return parseDevicesList(data.devices, dataType);
+        return parseDevicesList(data.devices as Device[], dataType);
     } catch (err) {
         return { error: err };
     }
@@ -255,4 +256,40 @@ export async function removeFavorite(id:weatherCloudId) {
     } catch (err) {
         return false;
     }
+}
+
+export async function getAllDevices() {
+    const devices = await fetchData(`https://app.weathercloud.net/map/bgdevices`);
+    const metar = await fetchData(`https://app.weathercloud.net/map/metars`);
+    // check validity
+    if (
+        !("devices" in devices) || !("owner" in devices) || !Array.isArray(devices.devices)
+        ||
+        !("metars" in metar) || !Array.isArray(metar.metars)
+    ) throw new Error("failed to fetch");
+    // parse
+    function parseDeviceList(list:deviceMapElement[]) {
+        return list.map(device => ({
+            code: device[4] === 0 ? device[0] : parseInt(device[0], 36), // convert device ids to base10
+            name: device[1],
+            type: device[4] === 0 ? "metar" : "device",
+            lat: device[2],
+            lon: device[3],
+            status: device[4],
+            isWebcam: !!device[5], // convert to boolean
+            temp: device[6] === "" ? null : device[6]/10,
+            hum: device[7] === "" ? null : device[7],
+            bar: device[8]/10,
+            wspdavg: device[9] === "" ? null : device[9]/10,
+            wdiravg: device[10] === "" ? null : device[10],
+            rain: device[11] === "" ? null : device[11]/10,
+            rainrate: device[12] === "" ? null : device[12]/10,
+            solarrad: device[13] === "" ? null : device[13]/10,
+            uvi: device[14] === "" ? null : device[14]/10,
+        }));
+    }
+    return [
+        ...parseDeviceList(devices.devices),
+        ...parseDeviceList(metar.metars)
+    ];
 }

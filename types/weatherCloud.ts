@@ -6,7 +6,9 @@ type singleStatistic = [
     number, // time of measurement
     number // value of measurement
 ]
-export type regularID = `${number}${number}${number}${number}${number}${number}${number}${number}${number}${number}`
+export type regularID =
+    `${number}${number}${number}${number}${number}${number}${number}${number}${number}${number}` |
+    `${number}${number}${number}${number}${number}${number}${number}${number}${number}`
 export type metarID = `${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}${Uppercase<string>}`
 
 export type weatherCloudId = regularID | metarID;
@@ -114,7 +116,7 @@ export interface Uptime {
 export interface DeviceInfo {
     device: { // self explanatory for most of things
         account: number|string // not sure what is this
-        status: string // neither for that
+        status: string // status of station
         city: string // city
         image: null|string // if there is a banner image dor the station, url of that image
         isWebcam: boolean // is there a webcam
@@ -305,4 +307,28 @@ export interface windStatistics { // data that you will get from the wind endpoi
         sum: number // not sure what is it
         scale: number[] // scale[0] represent calm wind, others wind (force?)
     }[] // 16 values each representing a cardinal (N, NNE, NE, etc)
+}
+
+export type deviceMapElement = [
+    string, // ID (in base36 for devices)
+    string, // name
+    number, // latitude
+    number, // longitude
+    number, // status - 0: metar 2: device 1: offline
+    number, // is webcam
+    number | "", // temperature (°C*10) string if undefined
+    number | "", // humidity string if undefined
+    number, // pressure (hPa*10)
+    number | "", // average wind speed (m/s*10) string if undefined
+    number | "", // average wind direction (deg) string if undefined
+    number | "", // rain (mm*10) string if undefined
+    number | "", // rainrate (mm/h*10) string if undefined
+    number | "", // solarrad string if undefined
+    number | "", // uvi string if undefined
+]
+
+export interface Map {
+    devices?: deviceMapElement[]
+    owner?: deviceMapElement[]
+    metars?: deviceMapElement[]
 }

@@ -1,5 +1,5 @@
 import { login } from ".";
-import type { LastUpdate, Profile, Statistic, WeatherData, Device, Uptime, DevicesList, OwnDevices, windStatistics, weatherCloudId, DeviceInfo, isFavoriteResponse, FavoriteResponse } from "./types/weatherCloud";
+import type { LastUpdate, Profile, Statistic, WeatherData, Device, Uptime, DevicesList, OwnDevices, windStatistics, weatherCloudId, DeviceInfo, isFavoriteResponse, FavoriteResponse, Map } from "./types/weatherCloud";
 
 type apiReturn = 
 	LastUpdate |
@@ -12,7 +12,8 @@ type apiReturn =
 	windStatistics |
 	DeviceInfo |
 	{ favoriteStatus: isFavoriteResponse } |
-	FavoriteResponse
+	FavoriteResponse |
+	Map
 ;
 
 const session = {
@@ -25,7 +26,7 @@ const session = {
 };
 
 export function checkId(id:weatherCloudId) { // check ID validity and return if is metar or device type
-	const deviceRegex = /^[0-9]{10}$/;
+	const deviceRegex = /^[0-9]{9,10}$/;
 	const metarRegex = /^[A-Z]{4}$/;
 	if (!id || (!deviceRegex.test(id) && !metarRegex.test(id))) return false; // check that id is valid
 	// defines the type of id

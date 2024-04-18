@@ -23,10 +23,11 @@ Want to directly use the weathercloud API on your own? Here is the endpoints doc
     - [`/page/newest`](#pagenewest)
     - [`/page/coordinates`](#pagecoordinates)
     - [`/page/own`](#pageown)
+    - [`/map/bgdevices`](#mapbgdevices)
+    - [`/map/metars`](#mapmetars)
   - [Known endpoints](#known-endpoints)
     - [`/device/evolution`](#deviceevolution)
-    - [`/map/metars`](#mapmetars)
-    - [`/map/bgdevices`](#mapbgdevices)
+    - [`/map/devices`](#mapdevices)
     - [`/signup`](#signup)
     - [`/page/lastviews`](#pagelastviews)
 
@@ -366,7 +367,7 @@ Full URL: `app.weathercloud.net/device/info/{id}`
 {
     device: {
         account: number | string, // not sure what is this
-        status: string, // neither for that
+        status: string, // 0: metar 2: device 1: offline
         city: string, // city
         image: null | string, // optional url of device banner image
         isWebcam: boolean, // is there a webcam
@@ -549,7 +550,6 @@ Full URL: `app.weathercloud.net/page/popular/country/{countryCode}/period/{perio
             "..."
             // just like /device/values return but as string for some reason
         },
-        status: string,
         data: string // number of views
     }
     // repeated for each devices
@@ -591,7 +591,6 @@ Full URL: `app.weathercloud.net/page/followers/country/{countryCode}`
         "..."
             // just like /device/values return but as string for some reason
         },
-        status: string,
         data: string // number of views
     }
     // repeated for each devices
@@ -633,7 +632,6 @@ Full URL: `app.weathercloud.net/page/newest/country/{countryCode}`
         "..."
             // just like /device/values return but as string for some reason
         },
-        status: string,
         data: string // number of views
     }
     // repeated for each devices
@@ -655,6 +653,7 @@ Full URL: `app.weathercloud.net/page/coordinates/latitude/{lat}/longitude/{lon}/
     radius: "RADIUS OF SEARCH (KM)"
 }
 ```
+
 **Response**
 ```ts
 [
@@ -677,7 +676,6 @@ Full URL: `app.weathercloud.net/page/coordinates/latitude/{lat}/longitude/{lon}/
             "..."
             // just like /device/values return but as string for some reason
         },
-        status: string,
         data: string // number of views
     }
     // repeated for each devices
@@ -718,7 +716,6 @@ Full URL: `app.weathercloud.net/page/own`
                 "..."
                 // just like /device/values return but as string for some reason
             },
-            status: string,
             data: string // number of views
         }
         // repeated for each devices
@@ -730,6 +727,96 @@ Full URL: `app.weathercloud.net/page/own`
 }
 ```
 
+### `/map/bgdevices`
+**Get the list of all devices**
+
+/!\ Return ALOT of data
+
+**Request**
+
+Full URL: `app.weathercloud.net/map/bgdevices`
+
+**DATA:** optionnal login cookie
+
+**Response**
+```ts
+{
+    device: [ // list of every devices
+        [
+            string, // ID (in base36 for devices)
+            string, // name
+            number, // latitude
+            number, // longitude
+            number, // status - 0: metar 2: device 1: offline
+            number, // is webcam
+            number, // temperature (°C*10)
+            number, // humidity
+            number, // pressure (hPa*10)
+            number, // average wind speed (m/s*10)
+            number, // average wind direction (deg)
+            number | string, // rainrate (mm/h*10) string if undefined
+            number | string, // solarrad string if undefined
+            number | string, // uvi string if undefined
+        ]
+        // repeating...
+    ],
+    owner: [ // owned devices (empty array if logged out)
+        [
+            string, // ID (in base36 for devices)
+            string, // name
+            number, // latitude
+            number, // longitude
+            number, // status - 0: metar 2: device 1: offline
+            number, // is webcam
+            number, // temperature (°C*10)
+            number, // humidity
+            number, // pressure (hPa*10)
+            number, // average wind speed (m/s*10)
+            number, // average wind direction (deg)
+            number | string, // rainrate (mm/h*10) string if undefined
+            number | string, // solarrad string if undefined
+            number | string, // uvi string if undefined
+        ]
+        // repeating...
+    ]
+}
+```
+
+### `/map/metars`
+**Get the list of all metars**
+
+/!\ Return ALOT of data
+
+**Request**
+
+Full URL: `app.weathercloud.net/map/metars`
+
+**DATA:** none
+
+**Response**
+```ts
+{
+    metars: [ // list of every metars
+        [
+            string, // ID (in base36 for devices)
+            string, // name
+            number, // latitude
+            number, // longitude
+            number, // status - 0: metar 2: device 1: offline
+            number, // is webcam
+            number, // temperature (°C*10)
+            number, // humidity
+            number, // pressure (hPa*10)
+            number, // average wind speed (m/s*10)
+            number, // average wind direction (deg)
+            number | string, // rainrate (mm/h*10) string if undefined
+            number | string, // solarrad string if undefined
+            number | string, // uvi string if undefined
+        ]
+        // repeating...
+    ]
+}
+```
 
 ## Known endpoints
 
@@ -751,11 +838,10 @@ Full URL: `app.weathercloud.net/device/evolution`
 }
 ```
 
-### `/map/metars`
+### `/map/devices`
 **Map related**
 
-### `/map/bgdevices`
-**Map related**
+Just like bgdevices but with loc to get less devices it seems
 
 ### `/signup`
 **Register an account**
