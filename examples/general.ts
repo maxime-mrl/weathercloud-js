@@ -1,4 +1,4 @@
-import { login, getStationStatus, getNearest, getTop, getOwn, getWind, fetchWeather, getStatistics, getInfos, isFavorite, addFavorite, removeFavorite, getProfile, getLastUpdate } from ".";
+import { login, getStationStatus, getNearest, getTop, getOwn, getWind, getWeather, getStatistics, getInfos, isFavorite, addFavorite, removeFavorite, getProfile, getLastUpdate } from "..";
 
 // TEST IDS
 // 4172447340 average station
@@ -8,14 +8,15 @@ import { login, getStationStatus, getNearest, getTop, getOwn, getWind, fetchWeat
 // LSGG METAR station
 
 // all examples made here, uncomment the part that interest you
+// will improves theses examples later on
 (async () => {
     // /* -------------------------- FETCH GENERAL WEATHER ------------------------- */
-    // const weather = await fetchWeather("4633478916");
+    // const weather = await getWeather("4172447340");
     // console.log(weather);
     // const profile = await getProfile("LSGG");
     // console.log(profile)
-    // const update = await getLastUpdate("LSGG");
-    // console.log(update)
+    const update = await getLastUpdate("LSGG");
+    console.log(update)
 
     // /* ------------------------- LOGIN AND LOGGED ROUTES ------------------------ */
     // const loggingstatus = await login("wadomag381@shaflyn.com", "azerty", true); // testing account made with garbage mail

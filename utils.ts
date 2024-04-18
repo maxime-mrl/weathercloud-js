@@ -91,6 +91,7 @@ export function parseDevicesList(devices:Device[], dataName?:string) { // correc
 				return [key, value];
 			})
 		);
+		if (dataName && !data) throw new Error("no data found")
 		if (dataName && data) return {
 			...deviceInfos,
 			values: numberValues,
