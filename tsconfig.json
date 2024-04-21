@@ -3,8 +3,8 @@
       /* Language and Environment */
       "target": "ES6",
       /* Modules */
-      "module": "commonjs",
-      "outDir": "./build",
+      "module": "ES6",
+      "outDir": "./dist",
       "removeComments": true,
       "esModuleInterop": true,
       "forceConsistentCasingInFileNames": true,
@@ -13,7 +13,12 @@
       "strict": true,
   
       /* Completeness */
-      "skipLibCheck": true
-    }
+      "skipLibCheck": true,
+      // builds
+      "baseUrl": ".",
+    },
+    "exclude": [
+      "./examples/*"
+    ]
   }
   

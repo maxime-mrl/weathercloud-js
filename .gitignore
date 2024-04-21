@@ -4,4 +4,4 @@ package-lock.json
 temp
 
 # Builds
-build
+dist

@@ -1,4 +1,4 @@
-import { login, getStationStatus, getNearest, getTop, getOwn, getWind, getWeather, getStatistics, getInfos, isFavorite, addFavorite, removeFavorite, getProfile, getLastUpdate } from "..";
+import { login, getStationStatus, getNearest, getTop, getOwn, getWind, getWeather, getStatistics, getInfos, isFavorite, addFavorite, removeFavorite, getProfile, getLastUpdate } from "../src/index";
 
 // TEST IDS
 // 4172447340 average station

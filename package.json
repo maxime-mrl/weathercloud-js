@@ -2,7 +2,9 @@
   "name": "weathercloud-api",
   "version": "1.0.0",
   "description": "reverse ingeniering of weathercloud's API in nodeJS",
-  "main": "index.ts",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "src/index.d.ts",
   "scripts": {
     "dev": "nodemon index.ts",
     "build": "tsc --build",

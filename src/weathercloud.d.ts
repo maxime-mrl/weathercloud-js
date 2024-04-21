@@ -327,8 +327,9 @@ export type deviceMapElement = [
     number | "", // uvi string if undefined
 ]
 
-export interface Map {
-    devices?: deviceMapElement[]
-    owner?: deviceMapElement[]
-    metars?: deviceMapElement[]
+export type Map = {
+    devices: deviceMapElement[]
+    owner: deviceMapElement[]
+} | {
+    metars: deviceMapElement[]
 }

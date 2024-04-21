@@ -211,7 +211,7 @@ await getWind(stationId:string): {
   date: number, // time of the update
   wdirproportions: number[], // array of proportion of wind, each one is a cardinals
   calm: number, // proportion of calm wind time (%)
-  wspddistData, // array of wind speeds, each one is a cardinals
+  wspddistData: number[], // array of wind speeds, each one is a cardinals
   raw: data // original values gl to know what this is exactly
 };
 ```
@@ -334,7 +334,7 @@ await getTop(stat:"newest"|"followers"|"popular", countryCode:string, period?:"d
 ### `getAllDevices()`
 **List ALL device /!\ very heavy return**
 ```ts
-await removeFavorite(parseDevice?:boolean=false): [ // parseDevice optional to let choice between easy work on data, or easyier for machine
+await getAllDevices(parseDevice?:boolean=false): { // parseDevice optional to let choice between easy work on data, or easyier for machine
   code: string, // station id
   name: string, // station name
   type: "metar"|"device",
@@ -351,7 +351,7 @@ await removeFavorite(parseDevice?:boolean=false): [ // parseDevice optional to l
   rainrate: null | number, // rainrate (mm/hour)
   solarrad: null | number, // solar radiation (W/m²)
   uvi: null | number, // UV index
-] | // depending of parseDevice
+} | // depending of parseDevice
 [ // not parsed
   string, // ID (in base36 for devices)
   string, // name

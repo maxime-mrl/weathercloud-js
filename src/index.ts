@@ -1,4 +1,4 @@
-import type { weatherCloudId, countryCode, periodStr, regularID, deviceMapElement, Device } from "./types/weatherCloud";
+import type { weatherCloudId, countryCode, periodStr, regularID, deviceMapElement, Device } from "./weathercloud";
 import { chillFn, heatFn, fetchData, setCookies, parseDevicesList, getCookie, checkId } from "./utils";
 
 export async function login(mail:string, password: string, storeCredentials?: boolean) { // log in and retrieve the session cookie
@@ -37,12 +37,12 @@ export async function getWeather(id:weatherCloudId) { // fetch general weather d
 
         /* ------------------------------ parse weather ----------------------------- */
         // calculate clouds height
-        const cloudsHeight = (data.temp && data.dew && data.temp > -40 && data.dew > -40) ? Math.max(0, 124.69*(data.temp - data.dew)) : null;
+        const cloudsHeight = (typeof data.temp === "number" && typeof data.dew === "number" && data.temp > -40 && data.dew > -40) ? Math.max(0, 124.69*(data.temp - data.dew)) : null;
         let weatherAvg: string|null = null;
         // check data presence
-        if (data.bar && typeof data.rainrate === "number" && typeof data.hum === "number") {
+        if (typeof data.bar === "number" && typeof data.rainrate === "number" && typeof data.hum === "number") {
             // check data validity
-            if (data.bar < 0 || data.rainrate < 0 || !cloudsHeight || data.hum < 0 || data.hum > 100) throw new Error("Invalid data");
+            if (data.bar < 0 || data.rainrate < 0 || typeof cloudsHeight !== "number" || data.hum < 0 || data.hum > 100) throw new Error("Invalid data");
             // guess current conditions based on data
             weatherAvg = "clear";
             if (data.rainrate == 0) {
@@ -59,8 +59,8 @@ export async function getWeather(id:weatherCloudId) { // fetch general weather d
         }
         // get feel (more or less just like heat / chill but since this is optionnal we get the value no matter what)
         let feel = data.temp ? data.temp : null;
-        if (data.temp && data.wspd && data.temp < 10) feel = chillFn(data.temp, data.wspd);
-        else if (data.temp && data.hum && data.temp > 26) feel = heatFn(data.temp, data.hum);
+        if (typeof data.temp === "number" && typeof data.wspd === "number" && data.temp < 10) feel = chillFn(data.temp, data.wspd);
+        else if (typeof data.temp === "number" && typeof data.hum === "number" && data.temp > 26) feel = heatFn(data.temp, data.hum);
 
         return {
             ...data,
@@ -267,6 +267,7 @@ export async function getOwn() {
 export async function isFavorite(id:weatherCloudId) {
     try {
         if (!checkId(id)) throw new Error("Invalid ID");
+        if ((await getCookie()).length < 1) throw new Error("Session required!");
         const data = await fetchData(`https://app.weathercloud.net/device/ajaxfavoritesnumber`, `d=${id}`);
         if (!("favoriteStatus" in data)) throw new Error("Failed to fetch");
         return data.favoriteStatus == "1" ? true : false;
@@ -278,6 +279,7 @@ export async function isFavorite(id:weatherCloudId) {
 export async function addFavorite(id:weatherCloudId) {
     try {
         if (!checkId(id)) throw new Error("Invalid ID");
+        if ((await getCookie()).length < 1) throw new Error("Session required!");
         if (await isFavorite(id)) return true;
         const data = await fetchData(`https://app.weathercloud.net/device/ajaxfavorite`, `device=${id}&delete=0`);
         if (!("favorites" in data) || !("success" in data)) throw new Error("Failed to fetch");
@@ -290,6 +292,7 @@ export async function addFavorite(id:weatherCloudId) {
 export async function removeFavorite(id:weatherCloudId) {
     try {
         if (!checkId(id)) throw new Error("Invalid ID");
+        if ((await getCookie()).length < 1) throw new Error("Session required!");
         if (!(await isFavorite(id))) return true;
         console.log("ok")
         const data = await fetchData(`https://app.weathercloud.net/device/ajaxfavorite`, `device=${id}&delete=1`);
