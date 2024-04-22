@@ -1,6 +1,6 @@
 {
   "name": "weathercloud-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "reverse engineering of weathercloud's API in nodeJS",
   "type": "module",
   "main": "dist/index.js",
@@ -8,13 +8,13 @@
   "author": "Maxime Morel",
   "url": "https://maxime-morel.xyz",
   "license": "MIT",
-  "homepage": "https://github.com/maxime-mrl/weathercloud-api#readme",
+  "homepage": "https://github.com/maxime-mrl/weathercloud-js#readme",
   "bugs": {
-    "url": "https://github.com/maxime-mrl/weathercloud-api/issues"
+    "url": "https://github.com/maxime-mrl/weathercloud-js/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/maxime-mrl/weathercloud-api.git"
+    "url": "https://github.com/maxime-mrl/weathercloud-js.git"
   },
   "keywords": [
     "weathercloud",

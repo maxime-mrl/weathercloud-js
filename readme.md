@@ -36,13 +36,13 @@ weathercloud.net is a web application that logs and makes publicly available wea
 ## Installation
 
 ```bash
-npm install weathercloud-api
+npm install weathercloud-js
 ```
 
 ## Usage / Example
 
 ```js
-import { getWeather } from "weathercloud-api";
+import { getWeather } from "weathercloud-js";
 
 (async () => {
   // Get the weather for station ID 4172447340
@@ -401,7 +401,7 @@ await removeFavorite(stationId:string): boolean; // return true if success
 
 ## API documentation
 
-API docs are now separate, you can find them in [api-documentation.md](api-documentation.md)
+API docs are now separate, you can find them in [api-documentation.md](https://github.com/maxime-mrl/weathercloud-js/blob/main/api-documentation.md)
 
 ## License
 
@@ -409,4 +409,4 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 
 ## Links
 
-- 📡[Github](https://github.com/maxime-mrl/weathercloud-api)
+- 📡[Github](https://github.com/maxime-mrl/weathercloud-js)
