@@ -1,23 +1,17 @@
-# Weathercloud API 📡
-
-**⚠️ work in progress**
+# Weathercloud JS API 📡
 
 ## What is it?
 
-weathercloud.net is a web application that logs and makes weather data from personal weather stations publicly accessible.
-
-**-> This is a reverse engineering of the private API used to retrieve data from one station.**
+weathercloud.net is a web application that logs and makes publicly available weather data from personal weather stations.
+> **This is a reverse engineering of the private API used to retrieve stations data.**
 
 ## Table of contents
 
-- [Weathercloud API 📡](#weathercloud-api-)
+- [Weathercloud JS API 📡](#weathercloud-js-api-)
   - [What is it?](#what-is-it)
   - [Table of contents](#table-of-contents)
-  - [Instalation](#instalation)
-  - [Usage](#usage)
-    - [Development](#development)
-    - [Build app](#build-app)
-    - [Example](#example)
+  - [Installation](#installation)
+  - [Usage / Example](#usage--example)
   - [Docs](#docs)
     - [Station\_id](#station_id)
     - [`login()`](#login)
@@ -36,59 +30,36 @@ weathercloud.net is a web application that logs and makes weather data from pers
     - [`addFavorite()`](#addfavorite)
     - [`removeFavorite()`](#removefavorite)
   - [API documentation](#api-documentation)
-  - [Roadmap / todo list - what's still to be done](#roadmap--todo-list---whats-still-to-be-done)
   - [License](#license)
   - [Links](#links)
 
-## Instalation
-
-Install necessary dependencies (typescript)
+## Installation
 
 ```bash
-npm install
+npm install weathercloud-api
 ```
 
-## Usage
-
-### Development
-
-```bash
-npm run dev
-```
-
-### Build app
-
-```bash
-npm run build
-```
-
-OR
-
-```bash
-npm run clean
-```
-
-### Example
+## Usage / Example
 
 ```js
-import { fetchWeather } from "."; // import index.ts
+import { getWeather } from "weathercloud-api";
 
 (async () => {
-  // get the weather for station id 4172447340
-  const weather = await fetchWeather("4172447340");
+  // Get the weather for station ID 4172447340
+  const weather = await getWeather("4172447340");
   console.log(weather);
 })();
 ```
-see more examples [here](examples)
+See more examples [here](examples)
 
 ## Docs
 
 ### Station_id
 
 Station ID can be:
-- 10 digits string for devices.
-- 9 digits string  for devices.
-- 4 letters string for METAR (following OACI airports codes).
+- A 10-digit string for devices.
+- A 9-digit string for devices.
+- A 4-letter string for METAR (following ICAO airport codes).
 
 ```ts
   const deviceId = "5692854635";
@@ -96,9 +67,9 @@ Station ID can be:
 ```
 
 ### `login()`
-**Log to a WeatherCloud account**
+**Log in to a WeatherCloud account**
 ```ts
-await login(mail:string, password:string, storecredentials?:boolean=false): boolean; // return true if logged successfully
+await login(mail: string, password: string, storecredentials?: boolean = false): boolean; // Returns true if logged in successfully
 ```
 
 ### `getWeather()`
@@ -164,7 +135,7 @@ await getProfile(stationId:string): {
 ```
 
 ### `getInfos()`
-**Get device infos**
+**Get device information**
 ```ts
 await getInfos(stationId:string): {
   device: { // infos
@@ -431,15 +402,6 @@ await removeFavorite(stationId:string): boolean; // return true if success
 ## API documentation
 
 API docs are now separate, you can find them in [api-documentation.md](api-documentation.md)
-
-## Roadmap / todo list - what's still to be done
-
-- [x] Define the last known url endpoints (enough for V)
-- [x] Create the method to utilize these endpoints
-- [x] Big code cleanup
-- [x] Search for unfound endpoints and restart these stages if needed
-- [x] Make a real documentation (Actually WIP)
-- [ ] Make an NPM module ?
 
 ## License
 

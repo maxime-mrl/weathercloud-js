@@ -1,17 +1,33 @@
 {
-  "name": "weathercloud-api",
+  "name": "weathercloud-js",
   "version": "1.0.0",
-  "description": "reverse ingeniering of weathercloud's API in nodeJS",
+  "description": "reverse engineering of weathercloud's API in nodeJS",
   "type": "module",
   "main": "dist/index.js",
   "types": "src/index.d.ts",
+  "author": "Maxime Morel",
+  "url": "https://maxime-morel.xyz",
+  "license": "MIT",
+  "homepage": "https://github.com/maxime-mrl/weathercloud-api#readme",
+  "bugs": {
+    "url": "https://github.com/maxime-mrl/weathercloud-api/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxime-mrl/weathercloud-api.git"
+  },
+  "keywords": [
+    "weathercloud",
+    "weather-cloud",
+    "weather",
+    "api",
+    "weathercloud-api"
+  ],
   "scripts": {
     "dev": "nodemon index.ts",
     "build": "tsc --build",
     "clean": "tsc --build --clean"
   },
-  "author": "Maxime Morel",
-  "license": "ISC",
   "devDependencies": {
     "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",

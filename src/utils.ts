@@ -1,4 +1,4 @@
-import { login } from "./index";
+import { login } from "./index.js";
 import type { LastUpdate, Profile, Statistic, WeatherData, Device, Uptime, DevicesList, OwnDevices, windStatistics, weatherCloudId, DeviceInfo, isFavoriteResponse, FavoriteResponse, Map } from "./weathercloud";
 
 type apiReturn = 

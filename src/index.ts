@@ -1,5 +1,5 @@
 import type { weatherCloudId, countryCode, periodStr, regularID, deviceMapElement, Device } from "./weathercloud";
-import { chillFn, heatFn, fetchData, setCookies, parseDevicesList, getCookie, checkId } from "./utils";
+import { chillFn, heatFn, fetchData, setCookies, parseDevicesList, getCookie, checkId } from "./utils.js";
 
 export async function login(mail:string, password: string, storeCredentials?: boolean) { // log in and retrieve the session cookie
     const formData = new URLSearchParams();
