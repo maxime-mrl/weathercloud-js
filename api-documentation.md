@@ -27,6 +27,7 @@ Want to directly use the weathercloud API on your own? Here is the endpoints doc
     - [`/map/metars`](#mapmetars)
   - [Known endpoints](#known-endpoints)
     - [`/device/evolution`](#deviceevolution)
+    - [`/device/ajaxfavorites`](#deviceajaxfavorites)
     - [`/map/devices`](#mapdevices)
     - [`/signup`](#signup)
     - [`/page/lastviews`](#pagelastviews)
@@ -838,6 +839,11 @@ Full URL: `app.weathercloud.net/device/evolution`
 }
 ```
 
+### `/device/ajaxfavorites`
+**List all followers of a station**
+
+d={DEVICE_ID} in request data response is a list of followers object
+
 ### `/map/devices`
 **Map related**
 
@@ -846,7 +852,7 @@ Just like bgdevices but with loc to get less devices it seems
 ### `/signup`
 **Register an account**
 
-This will stay forever not defined more, creating an account is:
+Creating an account is:
 1) Anoying and difficult (email verification).
 2) Not of any use for legitimate use (you never need more than one account, so you can create it manually).
 
