@@ -265,15 +265,15 @@ await getNearest(latitude: string|number, longitude: string|number, radius: stri
   city: string,
   latitude: string,
   longitude: string,
-  elevation: string // (m)
+  elevation: string, // (m)
 
-  image: string // image profile url of the station
-  account: number|string // ...
-  isFavorite: boolean // is station favourite (false when not logged)
-  update: number // seconds elapsed since last update
-  status?: string // 0: METAR, 2: Device OK 1: Device error
-  distance: number // distance from point (km)
-  values: Object // just like data from getWeather
+  image: string, // image profile url of the station
+  account: number|string, // ...
+  isFavorite: boolean, // is station favourite (false when not logged)
+  update: number, // seconds elapsed since last update
+  status?: string, // 0: METAR, 2: Device OK 1: Device error
+  distance: number, // distance from point (km)
+  values: Object, // just like data from getWeather
 }[];
 ```
 
@@ -288,17 +288,17 @@ await getTop(stat:"newest"|"followers"|"popular", countryCode:string, period?:"d
   city: string,
   latitude: string,
   longitude: string,
-  elevation: string // (m)
+  elevation: string, // (m)
 
-  image: string // image profile url of the station
-  account: number|string // ...
-  isFavorite: boolean // is station favourite (false when not logged)
-  update: number // seconds elapsed since last update
-  status?: string // 0: METAR, 2: Device OK 1: Device error
-  age?: number // distance from point (km) -- for newest only
-  views?: number // distance from point (km) -- for popular only
-  followers?: number // distance from point (km) -- for followers only
-  values: Object // just like data from getWeather
+  image: string, // image profile url of the station
+  account: number|string, // ...
+  isFavorite: boolean, // is station favourite (false when not logged)
+  update: number, // seconds elapsed since last update
+  status?: string, // 0: METAR, 2: Device OK 1: Device error
+  age?: number, // distance from point (km) -- for newest only
+  views?: number, // distance from point (km) -- for popular only
+  followers?: number, // distance from point (km) -- for followers only
+  values: Object, // just like data from getWeather
 }[];
 ```
 
@@ -365,16 +365,16 @@ await getOwn(): {
       city: string,
       latitude: string,
       longitude: string,
-      elevation: string // (m)
+      elevation: string, // (m)
 
-      image: string // image profile url of the station
-      account: number|string // ...
-      isFavorite: boolean // is station favourite (false when not logged)
-      update: number // seconds elapsed since last update
-      status?: string // 0: METAR, 2: Device OK 1: Device error
-      values: Object // just like data from getWeather
+      image: string, // image profile url of the station
+      account: number|string, // ...
+      isFavorite: boolean, // is station favourite (false when not logged)
+      update: number, // seconds elapsed since last update
+      status?: string, // 0: METAR, 2: Device OK 1: Device error
+      values: Object, // just like data from getWeather
     }
-  ]
+  ],
   devices: [ // owned devices list
     // just like favorite
   ]

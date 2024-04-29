@@ -64,9 +64,9 @@ export async function getWeather(id:weatherCloudId) { // fetch general weather d
 
         return {
             ...data,
-            computed: {
-                cloudsHeight,
-                feel,
+            computed: { // rounded computed data
+                cloudsHeight: cloudsHeight ? Math.round(cloudsHeight*10)/10 : null,
+                feel: feel ? Math.round(feel*10)/10 : null,
                 weatherAvg
             }
         }
