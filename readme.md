@@ -255,7 +255,7 @@ await getStationStatus(stationId:string): {
 ```
 
 ### `getNearest()`
-**Get station in given radius of a GPS point**
+**Get station in given radius of a GPS point** - Limited to 30 devices return
 ```ts
 await getNearest(latitude: string|number, longitude: string|number, radius: string|number): {
   type: "device"|"metar",

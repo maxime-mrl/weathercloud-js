@@ -640,7 +640,7 @@ Full URL: `app.weathercloud.net/page/newest/country/{countryCode}`
 ```
 
 ### `/page/coordinates`
-**Get nearest station from coordinate**
+**Get nearest station from coordinate** - Limited to 30 devices return
 
 **Request**
 

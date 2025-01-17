@@ -1,6 +1,6 @@
 {
   "name": "weathercloud-js",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "reverse engineering of weathercloud's API in nodeJS",
   "type": "module",
   "main": "dist/index.js",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/maxime-mrl/weathercloud-js.git"
+    "url": "git+https://github.com/maxime-mrl/weathercloud-js.git"
   },
   "keywords": [
     "weathercloud",
